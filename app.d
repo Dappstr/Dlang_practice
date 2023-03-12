@@ -5,8 +5,33 @@ import std.conv;
 import std.string; //to! conversions
 import std.format; //formattedRead()
 import std.file;
+import std.bitmanip;
 
-void main() {
+//Playing with bitfields
+struct CPU
+{
+	ushort PC; //Program counter
+	ubyte SP, Acc, X, Y; //Registers: Stack Pointer, Accumulator, Index Register X, Index Register Y
+
+	//Processor Status Flags
+	struct PS {
+		mixin(bitfields!(
+			ubyte, "C", 1,
+			ubyte, "Z", 1,
+			ubyte, "I", 1,
+			ubyte, "D", 1,
+			ubyte, "B", 1,
+			ubyte, "O", 1,
+			ubyte, "N", 1,
+			bool, "flag", 1
+		));
+	}
+}
+
+
+void main()
+{
+
     //readf("%s".chomp(), &someVar) <- .chomp() removes newline
 	//Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
 	//to!TYPE(object) for conversions in ternary operation
@@ -21,7 +46,7 @@ void main() {
 	arr.remove!(a => a == 42); | Lambda predicate function to remove any element that equals 42
 				'a' is type deduced based on either the expression or underlying type of the array
 	
-    int[10] first = 1;
+	int[10] first = 1;
     int[10] second = 2;
     int[] result;
 
@@ -139,7 +164,7 @@ void main() {
 
 	.readln property for reading from file object
 	.writeln property for writing to file object
-	*/
+	
 	File file = File("test.txt", "w+");
 	if(exists("test.txt")) {
 		/*
@@ -148,8 +173,9 @@ void main() {
 			string line = strip(file.readln());
 			writeln(line);
 		}
-		*/
+		
 		file.writeln("Test ", "Four");
 	}
 	file.close();
+	*/
 }
