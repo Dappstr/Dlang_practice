@@ -28,7 +28,6 @@ struct CPU
 	}
 }
 
-
 void main()
 {
 
