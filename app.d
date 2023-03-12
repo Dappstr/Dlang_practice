@@ -21,7 +21,7 @@ void main() {
 	arr.remove!(a => a == 42); | Lambda predicate function to remove any element that equals 42
 				'a' is type deduced based on either the expression or underlying type of the array
 	
-	int[10] first = 1;
+    int[10] first = 1;
     int[10] second = 2;
     int[] result;
 
