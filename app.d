@@ -3,7 +3,7 @@ module source.app;
 import std.stdio;
 import std.conv;
 import std.string; //to! conversions
-import std.format;
+import std.format; //formattedRead()
 
 void main() {
     //readf("%s".chomp(), &someVar) <- .chomp() removes newline
@@ -91,6 +91,29 @@ void main() {
 	readln reads up until the end of the line
 	strip() removes trailing and leading whitespace, and can be chained
 		string name = strip(readln());
+	
+	formattedRead() from std.format converts separate data.
+		first argument = line to read from
+		second parameter are amount to divide in
+		...n parameters are objects to read into
+	string line = strip(readln());
+    string name;
+    int age;
+    formattedRead(line, " %s %s", name, age);
+	amount of "data items" can be validated as such:
+		uint items = formattedRead(line, " %s %s", name, age); 
+		if (items != 2) {
+  			writeln("Error: Expected more than one item.");
+		}
+	string is immutable
+	char[] is mutable
+	.dup for duplicating a string to a mutable char array
+	.idup for duplicating a mutable char array to an immutable string
+	.icmp for comparing strings
+
+	dchar[] s = "résumé"d.dup;
+	There is a d at the end of the literal "résumé"d, specifying its type as an array of dchars
+	'~' concatenates two strings, '~=' appends to string
 	*/
 
 }
