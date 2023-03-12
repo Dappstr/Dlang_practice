@@ -7,13 +7,15 @@ import std.format; //formattedRead()
 import std.file;
 import std.bitmanip;
 
-//Playing with bitfields
-struct CPU
+//I will find a better way to do this in the future
+union CPU_INST
 {
-	ushort PC; //Program counter
-	ubyte SP, Acc, X, Y; //Registers: Stack Pointer, Accumulator, Index Register X, Index Register Y
+	struct CPU
+	{
+		ushort PC; //Program counter
+		ubyte SP, Acc, X, Y; //Registers: Stack Pointer, Accumulator, Index Register X, Index Register Y
+	} CPU cpuObj;
 
-	//Processor Status Flags
 	struct PS {
 		mixin(bitfields!(
 			ubyte, "C", 1,
@@ -25,12 +27,11 @@ struct CPU
 			ubyte, "N", 1,
 			bool, "flag", 1
 		));
-	}
+	} PS psObj;
 }
 
 void main()
 {
-
     //readf("%s".chomp(), &someVar) <- .chomp() removes newline
 	//Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
 	//to!TYPE(object) for conversions in ternary operation
