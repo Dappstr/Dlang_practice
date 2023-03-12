@@ -6,6 +6,7 @@ import std.string; //to! conversions
 import std.format; //formattedRead()
 import std.file;
 import std.bitmanip;
+import std.traits; // EnumMembers template
 
 //I will find a better way to do this in the future
 union CPU_INST
@@ -18,13 +19,13 @@ union CPU_INST
 
 	struct PS {
 		mixin(bitfields!(
-			ubyte, "C", 1,
-			ubyte, "Z", 1,
-			ubyte, "I", 1,
-			ubyte, "D", 1,
-			ubyte, "B", 1,
-			ubyte, "O", 1,
-			ubyte, "N", 1,
+			ubyte, "C", 1, //Carry
+			ubyte, "Z", 1, //Zero
+			ubyte, "I", 1, //Interupt
+			ubyte, "D", 1, //Decimal
+			ubyte, "B", 1, //Break
+			ubyte, "O", 1, //Overflow
+			ubyte, "N", 1, //Negative
 			bool, "flag", 1
 		));
 	} PS psObj;
@@ -178,4 +179,13 @@ void main()
 	}
 	file.close();
 	*/
+
+    enum Suit { spades, hearts, diamonds, clubs }
+
+	//EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
+    foreach (suit; EnumMembers!Suit) {
+      writefln("%s: %d", suit, suit); 
+    }
+	Suit suit = cast(Suit)1; // Evaluates to hearts since "1" is casted to type Suit
+
 }
