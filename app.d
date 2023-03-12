@@ -4,6 +4,7 @@ import std.stdio;
 import std.conv;
 import std.string; //to! conversions
 import std.format; //formattedRead()
+import std.file;
 
 void main() {
     //readf("%s".chomp(), &someVar) <- .chomp() removes newline
@@ -116,4 +117,39 @@ void main() {
 	'~' concatenates two strings, '~=' appends to string
 	*/
 
+	/*
+	./app < src.txt streams input from src.txt into the app
+	./app > dst.txt streams output from app into src.txt
+	std.stdio module has a File struct
+	Byte Order Mark (BOM) may be required on some systems, which specifies the order the UTF code unites of characters are arranged
+	The std.file module contains functions and types that are useful when working with the contents of directories
+	if (exists(fileName)) {
+    	there is a file or directory under that name
+  }
+	*/
+
+	/*	
+	Access modes:
+	r = read
+	r+ = read/write, will error if file does not exist
+	w = write access, if file does not exist, it is created, IF FILE DOES EXIST, ITS CONTENTS ARE CLEARED
+	w+ = write/read, if file does not exist, it is created, IF FILE DOES EXIST, ITS CONTENTS ARE CLEARED
+	a = append, if file does not exist, it is created, once opened, it is written only towards the end
+	a+ = read and append, if file does not exist, it is created, once opened, it is written only towards the end
+
+	.readln property for reading from file object
+	.writeln property for writing to file object
+	*/
+	File file = File("test.txt", "w+");
+	if(exists("test.txt")) {
+		/*
+		Entire block is useless since file has been cleared due to access mode
+		while(!file.eof()) {
+			string line = strip(file.readln());
+			writeln(line);
+		}
+		*/
+		file.writeln("Test ", "Four");
+	}
+	file.close();
 }
