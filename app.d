@@ -1,12 +1,13 @@
 module source.app;
 
 import std.stdio;
-import std.conv;
-import std.string; //to! conversions
-import std.format; //formattedRead()
+import std.conv; // to! conversions
+import std.string;
+import std.format; // formattedRead()
 import std.file;
 import std.bitmanip;
 import std.traits; // EnumMembers template
+import std.range; // stride()
 
 //I will find a better way to do this in the future
 union CPU_INST
@@ -37,6 +38,23 @@ void main()
 	//Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
 	//to!TYPE(object) for conversions in ternary operation
 	//uniform(startingValue, outOfRangeValue) for random number generation
+
+	/*
+	writefln = formatted writeln
+	%b: binary, %o = octal
+	%x: hexadecimal, %d = decimal
+	%s: literal value depending on type
+	%,: separator (%,s = groups of 3, %,2s = groups of 2)
+	%.Ng or %.Nf = precision of decimal places N
+
+	readf format specifiers:
+	%d: read an integer in the decimal system.
+	%o: read an integer in the octal system.
+	%x: read an integer in the hexadecimal system.
+	%f: read a floating point number.
+	%s: read according to the type of the variable. This is the most commonly used specifier.
+	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
+	*/
 
 	/*
 	T[] arr; | Dynamically allocated
@@ -180,12 +198,74 @@ void main()
 	file.close();
 	*/
 
-    enum Suit { spades, hearts, diamonds, clubs }
+    //enum Suit { spades, hearts, diamonds, clubs }
 
 	//EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
-    foreach (suit; EnumMembers!Suit) {
+   /* foreach (suit; EnumMembers!Suit) {
       writefln("%s: %d", suit, suit); 
     }
-	Suit suit = cast(Suit)1; // Evaluates to hearts since "1" is casted to type Suit
+	Suit suit = cast(Suit)1; // Evaluates to hearts since "1" is casted to type Suit*/
 
+	/*
+	foreach(x, y; someContainer)
+		for more than one name in the names section, x represents a counter, y represents the value
+	when iterating over unicode, use the stride() function which considers the string as a container and takes two arguments:
+		the specified string, and the amount of steps to take to stride over the characters.
+	associative arrays contain .byKey, .byValue, and .byKeyValue traits to help with iterating and return efficient range objects
+	
+	.byKey is the only efficient way of iterating over just the keys of an associative array:
+	int[string] aa = [ "blue" : 10, "green" : 20 ]; 
+    foreach (key; aa.byKey) {
+        writeln(key);
+    }
+
+	.byKeyValue provides access to each key-value element through a variable that is similar to a tuple. The key and the value are accessed separately through the .key and .value properties of that variable:
+	int[string] aa = [ "blue" : 10, "green" : 20 ]; 
+    foreach (element; aa.byKeyValue) { 
+        writefln("The value for key %s is %s", element.key, element.value);
+    }
+
+	ref keyword creates a reference to the actual members or elements of the container.
+	foreach(ref obj; container) {
+		through obj, now everything iterated over container will take effect
+		...
+	}
+
+	foreach_reverse() does the same as foreach but in reverse
+	*/
+
+	/*
+	"goto case;" jumps to the next in line case
+	"goto default" jumps to the default case
+	The type of the switch expression is limited to integer types, string types and bool
+	switch/case supports range syntax
+	
+	switch (someExpr) {
+    case 1:
+        ...
+
+    case 2: .. case 5: 
+        ...
+
+    case 6:
+        ...
+	}
+
+	The final switch statement works similarly to the regular switch statement, with the following differences:
+		It cannot have a default section. Note that this section is meaningless when the case sections cover the entire range of values anyway, similar to the six values of the die above.
+		Value ranges cannot be used with case sections (distinct values can be).
+		If the expression is of an enum type, all values of the enum must be covered by the case statements.
+
+	final switch (someExpr) {
+		case 1:
+		...
+
+		case 2, 3, 4, 5: 
+		...
+
+		case 6:
+		...
+		}
+	*/
+	
 }
