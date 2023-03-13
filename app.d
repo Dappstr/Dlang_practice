@@ -45,6 +45,7 @@ void main(string[] args)
 	to!TYPE(object) for conversions in ternary operation
 	uniform(startingValue, outOfRangeValue) for random number generation
 	*/
+
 	//---FORMAT SPECIFIERS---\\
 	/*
 	writefln = formatted writeln
@@ -413,5 +414,44 @@ void main(string[] args)
 	compiler flag -release ignores asserts
 	enforce() is a wrapper for assert() that throws exceptions
 	if (count < 3) { throw new Exception("Must be at least 3."); } -> Equivalent: enforce(count >= 3, "Must be at least 3.");
+	*/
+
+	//--UNIT TESTING---\\
+	/*
+	unittest blocks are for unit testing and do not affect the program directly
+	std.exception module contains two functions that help with testing for exceptions:
+		assertThrown: ensures that a specific exception type is thrown from an expression
+		assertNotThrown: ensures that a specific exception type is not thrown from an expression
+	*/
+
+	//--CONTRACT PROGRAMMING---\\
+	/*
+	contract programming in D is enabled by default (disabled with the -release flag) and implemented in 3 types of code blocks:
+		in, out, and struct/class invariant blocks
+	in an "in" or "out" block, checks are performed (such as asserts) or what're called "preconditions" for "in" respectively, and "postconditions" for "out" respectively.
+	"in" and "out" blocks must be followed by "do" blocks
+	void someFunc(...) {
+		in {
+			assert(...);
+			assert(...);
+		} do {
+			...
+		}
+	}
+	void someOtherFunc(...) {
+		out (someVar) {
+			assert(someVar...);
+		} do {
+			...
+		}
+	}
+
+	Other example with cleaner code:
+	int func(int a, int b) {
+		in (a >= 7, "a cannot be less than 7") in (b < 10)
+		out (result; result > 1000) {
+			...
+		}
+	}
 	*/
 }
