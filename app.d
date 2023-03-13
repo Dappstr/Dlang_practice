@@ -239,7 +239,7 @@ void main()
 	"goto default" jumps to the default case
 	The type of the switch expression is limited to integer types, string types and bool
 	switch/case supports range syntax
-	
+
 	switch (someExpr) {
     case 1:
         ...
@@ -266,6 +266,25 @@ void main()
 		case 6:
 		...
 		}
+	*/
+
+	/*
+	enum a = [ 42, 100 ]; 
+	writeln(a);
+	foo(a);
+
+	is equivalent to
+
+	writeln([ 42, 100 ]); an array is created at  run time 
+	foo([ 42, 100 ]); another array is created at run time
+	*/
+
+	/*
+	const erases the information about whether the original variable was mutable or immutable. This information is hidden even from the compiler
+	immutable(T)[] slice = [...] equates to the elements being immutable rather than the slice its-self
+	As a general rule, prefer immutable variables over mutable ones. For functions that take mutable data and have to modify it, immutable variables will not serve the purpose
+	Specify variables as immutable if their values will never change but cannot be known at compile time
+	Define constant values as enum if their values can be calculated at compile time
 	*/
 	
 }
