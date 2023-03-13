@@ -11,6 +11,8 @@ import std.range; // stride()
 import std.getopt;
 import std.random;
 import std.process;
+import std.exception;
+
 //I will find a better way to do this in the future
 union CPU_INST
 {
@@ -36,11 +38,14 @@ union CPU_INST
 
 void main(string[] args)
 {
-    //readf("%s".chomp(), &someVar) <- .chomp() removes newline
-	//Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
-	//to!TYPE(object) for conversions in ternary operation
-	//uniform(startingValue, outOfRangeValue) for random number generation
-
+	//---MISC---\\
+    /*
+	readf("%s".chomp(), &someVar) <- .chomp() removes newline
+	Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
+	to!TYPE(object) for conversions in ternary operation
+	uniform(startingValue, outOfRangeValue) for random number generation
+	*/
+	//---FORMAT SPECIFIERS---\\
 	/*
 	writefln = formatted writeln
 	%b: binary, %o = octal
@@ -58,6 +63,7 @@ void main(string[] args)
 	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 	*/
 
+	//---ARRAYS---\\
 	/*
 	T[] arr; | Dynamically allocated
 	arr.length = N; | Resized
@@ -113,6 +119,7 @@ void main(string[] args)
 	When the number of elements to append is known beforehand, it is possible to reserve capacity for the elements using the .reserve function
 	*/
 
+	//---CHARACTERS---\\
 	/*
 	char <- UTF-8 , initial value: 0xFF
 	wchar <- UTF-16 , initial value: 0xFFFF
@@ -132,6 +139,7 @@ void main(string[] args)
 		toUpper: produces the uppercase version of the given character.
 	*/
 
+	//---STRINGS---\\
 	/*
 	readln(name);
 	name = strip(name);
@@ -163,6 +171,7 @@ void main(string[] args)
 	'~' concatenates two strings, '~=' appends to string
 	*/
 
+	//---INPUT/OUTPUT TO BINARY---\\
 	/*
 	./app < src.txt streams input from src.txt into the app
 	./app > dst.txt streams output from app into src.txt
@@ -171,9 +180,10 @@ void main(string[] args)
 	The std.file module contains functions and types that are useful when working with the contents of directories
 	if (exists(fileName)) {
     	there is a file or directory under that name
-  }
+	}
 	*/
 
+	//---FILES---\\
 	/*	
 	Access modes:
 	r = read
@@ -200,14 +210,27 @@ void main(string[] args)
 	file.close();
 	*/
 
-    //enum Suit { spades, hearts, diamonds, clubs }
+	//---ENUMS---\\
+	/*
+	EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
 
-	//EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
-   /* foreach (suit; EnumMembers!Suit) {
+	enum Suit { spades, hearts, diamonds, clubs }
+   	foreach (suit; EnumMembers!Suit) {
       writefln("%s: %d", suit, suit); 
     }
-	Suit suit = cast(Suit)1; // Evaluates to hearts since "1" is casted to type Suit*/
+	Suit suit = cast(Suit)1; // Evaluates to hearts since "1" is casted to type Suit
 
+	enum a = [ 42, 100 ]; 
+	writeln(a);
+	foo(a);
+
+	is equivalent to
+
+	writeln([ 42, 100 ]); an array is created at  run time 
+	foo([ 42, 100 ]); another array is created at run time
+	*/
+
+	//---FOREACH & ASSOCIATIVE ARRAYS---\\
 	/*
 	foreach(x, y; someContainer)
 		for more than one name in the names section, x represents a counter, y represents the value
@@ -236,6 +259,7 @@ void main(string[] args)
 	foreach_reverse() does the same as foreach but in reverse
 	*/
 
+	//---SWITCH BLOCKS---\\
 	/*
 	"goto case;" jumps to the next in line case
 	"goto default" jumps to the default case
@@ -270,17 +294,7 @@ void main(string[] args)
 		}
 	*/
 
-	/*
-	enum a = [ 42, 100 ]; 
-	writeln(a);
-	foo(a);
-
-	is equivalent to
-
-	writeln([ 42, 100 ]); an array is created at  run time 
-	foo([ 42, 100 ]); another array is created at run time
-	*/
-
+	//---CONST AND IMMUTABLE---\\
 	/*
 	const erases the information about whether the original variable was mutable or immutable. This information is hidden even from the compiler
 	immutable(T)[] slice = [...] equates to the elements being immutable rather than the slice its-self
@@ -289,6 +303,7 @@ void main(string[] args)
 	Define constant values as enum if their values can be calculated at compile time
 	*/
 
+	//---FUNCTION PARAMETER SPECIFIERS---\\
 	/*
 	"ref" parameters are an alias to an object and are not guaranteed to modify it
 	"auto ref" is used in templates only. It specifies that if the argument is an lvalue, then a reference to it is passed; if the argument is an rvalue, then it is passed by copy.
@@ -297,9 +312,7 @@ void main(string[] args)
 	"const" declares that objects will not be modified
 	"immutable" declares only non-changeable objects can be passed
 	"inout" carries the mutability of the parameter on to the return type. If the parameter is const, immutable or mutable; then the return value is also const, immutable or mutable; respectively
-	*/
 	
-	/*
 	Evaluating arguments before calling a function is called eager evaluation.
 	The "lazy" keyword specifies that an expression that is passed as a parameter will be evaluated only if and when needed.
 		NOTE: lazy parameter is evaluated every time that parameter is used in the function
@@ -309,18 +322,16 @@ void main(string[] args)
 		A sealed reference is when you have a reference to an object that extend beyond its lifetime
 	*/
 
+	//---MAIN---\\
 	/*
 	if main is declared with a void return type, the return value is nonzero if an exception is thrown
 	stderr is the stream used for writing error messages
 	*/
 
+	//---PROGRAM ARGUMENTS---\\
 	/*
 	std.getopt module helps in parsing command line arguments for your program
 	The getopt() function parses and assigns those values to variables. As we saw with readf(), the addresses of variables must be specified by the & operator
-
-	import std.stdio; 
-	import std.getopt; 
-	import std.random;
 
 	void main(string[] args) {
 		int count, minimum, maximum;
@@ -340,12 +351,14 @@ void main(string[] args)
 	./app --count=7 --minimum=10 --maximum=15
 	*/
 
+	//---PROGRAM ENVIRONMENT---\\
 	/*
 	std.process allows access to environment your binary sits in
 	writeln(environment["PATH"]); prints the path of your binary
 	executeShell() can access and execute other programs
 	*/
 
+	//---EXCEPTIONS---\\
 	/*
 	Only the types that are inherited from the Throwable class can be thrown.
 	The types that are actually thrown are types that are inherited from Exception or Error, which themselves are the types that are inherited from Throwable.
@@ -391,5 +404,14 @@ void main(string[] args)
 	scope(failure) writeln("scope exited with a failure);
 
 	when no exception is thrown, scope(exit) and scope(success) are executed, when an exception is thrown, scope(exit) and scope(failure) are executed
+	*/
+
+	//---ASSERT AND ENFORCE--\\
+	/*
+	assert() performs run-time checks
+	static assert() performs compile-time checks
+	compiler flag -release ignores asserts
+	enforce() is a wrapper for assert() that throws exceptions
+	if (count < 3) { throw new Exception("Must be at least 3."); } -> Equivalent: enforce(count >= 3, "Must be at least 3.");
 	*/
 }
