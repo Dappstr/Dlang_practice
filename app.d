@@ -286,5 +286,24 @@ void main()
 	Specify variables as immutable if their values will never change but cannot be known at compile time
 	Define constant values as enum if their values can be calculated at compile time
 	*/
+
+	/*
+	"ref" parameters are an alias to an object and are not guaranteed to modify it
+	"auto ref" is used in templates only. It specifies that if the argument is an lvalue, then a reference to it is passed; if the argument is an rvalue, then it is passed by copy.
+	"out" parameters are also an alias to an object and are guaranteed to modify it as the objects value is not considered
+	"in" preserves the argument
+	"const" declares that objects will not be modified
+	"immutable" declares only non-changeable objects can be passed
+	"inout" carries the mutability of the parameter on to the return type. If the parameter is const, immutable or mutable; then the return value is also const, immutable or mutable; respectively
+	*/
 	
+	/*
+	Evaluating arguments before calling a function is called eager evaluation.
+	The "lazy" keyword specifies that an expression that is passed as a parameter will be evaluated only if and when needed.
+		NOTE: lazy parameter is evaluated every time that parameter is used in the function
+	The "scope" keyword specifies that a parameter will not be used beyond the scope of the function. Currently the scope is effective only if the function is defined as @safe and if the -dip1000 compiler switch is used.
+	The "shared" keyword requires that the parameter is shareable between threads of execution
+	The "return" keyword can be applied to a parameter to prevent such bugs. It specifies that a parameter must be a reference to a variable with a longer lifetime than the returned reference
+		A sealed reference is when you have a reference to an object that extend beyond its lifetime
+	*/
 }
