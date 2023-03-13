@@ -8,7 +8,9 @@ import std.file;
 import std.bitmanip;
 import std.traits; // EnumMembers template
 import std.range; // stride()
-
+import std.getopt;
+import std.random;
+import std.process;
 //I will find a better way to do this in the future
 union CPU_INST
 {
@@ -32,7 +34,7 @@ union CPU_INST
 	} PS psObj;
 }
 
-void main()
+void main(string[] args)
 {
     //readf("%s".chomp(), &someVar) <- .chomp() removes newline
 	//Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
@@ -305,5 +307,89 @@ void main()
 	The "shared" keyword requires that the parameter is shareable between threads of execution
 	The "return" keyword can be applied to a parameter to prevent such bugs. It specifies that a parameter must be a reference to a variable with a longer lifetime than the returned reference
 		A sealed reference is when you have a reference to an object that extend beyond its lifetime
+	*/
+
+	/*
+	if main is declared with a void return type, the return value is nonzero if an exception is thrown
+	stderr is the stream used for writing error messages
+	*/
+
+	/*
+	std.getopt module helps in parsing command line arguments for your program
+	The getopt() function parses and assigns those values to variables. As we saw with readf(), the addresses of variables must be specified by the & operator
+
+	import std.stdio; 
+	import std.getopt; 
+	import std.random;
+
+	void main(string[] args) {
+		int count, minimum, maximum;
+		
+		getopt(args,
+			"count", &count,
+			"minimum", &minimum, 
+			"maximum", &maximum);
+
+		foreach (i; 0 .. count) {
+			write(uniform(minimum, maximum + 1), ' '); 
+		}
+
+		writeln(); 
+	}
+	example:
+	./app --count=7 --minimum=10 --maximum=15
+	*/
+
+	/*
+	std.process allows access to environment your binary sits in
+	writeln(environment["PATH"]); prints the path of your binary
+	executeShell() can access and execute other programs
+	*/
+
+	/*
+	Only the types that are inherited from the Throwable class can be thrown.
+	The types that are actually thrown are types that are inherited from Exception or Error, which themselves are the types that are inherited from Throwable.
+	Error represents unrecoverable conditions and is not recommended to be caught
+	In most cases, instead of creating an exception object explicitly by new and throwing it explicitly by throw, the enforce() function is called
+		example:
+		enforce(count >= 0, format("Invalid dice count: %s", count));
+	Use throw in situations when it is not possible to continue
+	try {
+    // the code block that is being executed, where an exception may be thrown
+	} catch (an_exception_type) {
+		// expressions to execute if an exception of this type is caught
+	} finally {
+		// expressions to execute regardless of whether an exception is thrown
+	}
+
+	if opening a file fails for example, a "std.exception.ErrnoException" exception object will be thrown
+											std.exception.ConvException is for conversion errors
+	objects of type Error can also be caught, although NOT RECOMMENDED
+	catch(Exception exc) is a general "catch-all" for exceptions and is not recommended
+	the "finally" block will execute regardless of if an exception is thrown or not
+
+	PROPERTIES OF EXCEPTION OBJECTS:
+		.file: the source file where the exception was thrown from
+		.line: the line number where the exception was thrown from
+		.msg:  the error message
+		.info: the state of the program stack when the exception was thrown
+		.next: the next collateral exception
+
+	 Exceptions that are thrown while leaving scopes due to an already thrown exception are called collateral exceptions.
+	 Both the main exception and the collateral exceptions are elements of a linked list data structure, where every exception object is accessible through the .next property of the previous exception object
+
+	scope expressions are executed depending on how a scope exits
+		scope(exit): the expression is always executed when exiting the scope, regardless of whether it is successful or due to an exception
+		scope(success): the expression is executed only if the scope is being exited successfully
+		scope(failure): the expression is executed only if the scope is being exited due to an exception
+
+	scope(exit) writeln("scope exited normally");
+	scope(success) {
+		writeln("scope exited successfully");
+		...
+	}
+	scope(failure) writeln("scope exited with a failure);
+
+	when no exception is thrown, scope(exit) and scope(success) are executed, when an exception is thrown, scope(exit) and scope(failure) are executed
 	*/
 }
