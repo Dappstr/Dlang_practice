@@ -12,6 +12,7 @@ import std.getopt;
 import std.random;
 import std.process;
 import std.exception;
+import std.math; //isNaN()
 
 //I will find a better way to do this in the future
 union CPU_INST
@@ -36,13 +37,18 @@ union CPU_INST
 	} PS psObj;
 }
 
+void printStrings(string[] strs...) {
+	foreach(str; strs) {
+		write(str, ' ');
+	}
+}
+
 void main(string[] args)
 {
 	//---MISC---\\
     /*
 	readf("%s".chomp(), &someVar) <- .chomp() removes newline
 	Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
-	to!TYPE(object) for conversions in ternary operation
 	uniform(startingValue, outOfRangeValue) for random number generation
 	*/
 
@@ -454,4 +460,100 @@ void main(string[] args)
 		}
 	}
 	*/
+
+	//--NULL VALUE AND "is" OPERATOR---\\
+	/*
+	a variable with a class type that is not initialized with "new" does not reference an (anonymous) class object
+	in order to check if the variable is null, do not use '==', use the "is" operator:
+		if(someObj is null)
+		!is can also be used
+	assigning null to an associative array breaks the relationship between the variable and the elements
+	*/
+
+	//---TYPE CONVERSION---\\
+	/*
+	if arithmetic involves one real value, then the other variable is converted to real, same with double and float
+	C-like explicit conversions are supported
+		int someVar;
+		const someConst = double(someVar)/2;
+	to!TYPE(object) is also an explicit conversion using the to() template function, also supports immutable conversions
+	assumeUnique() makes the elements of a slice immutable without copying and makes the original slice null
+		int[] numbers ...
+    	auto immutableNumbers = assumeUnique(numbers);
+	to() ensures safe conversions, cast(destinationType) does not
+	cast() can convert between pointer and non-pointer types as well
+	*/
+
+	//---STRUCTS---\\
+	/*
+	immutable objects must be created with a construction object since members cannot be modified
+		immutable obj = S(x, y);
+	slice members will be linked between copies unless copied through .dup
+		auto someObj = S(i, [x, y, z]);
+		auto someObj2 = S(i, someObj.slice.dup); <- without dup, someObj and someObj2 share the same slice
+	static this() blocks are automatically executed once PER THREAD before a struct type is ever used in that thread.
+		struct Point {
+			enum nextIdFile = "Point_next_id_file";
+		
+			static this() {
+			if (exists(nextIdFile)) {
+				auto file = File(nextIdFile, "r");
+				file.readf(" %s", &nextId); 
+			}
+		}
+	shared static this() blocks will be executed only once in the entire program regardless of the number of threads
+	Similarly, static ~this() is for the final operations of a thread, and shared static ~this() is for the final operations of the entire program
+	*/
+
+	//---COMPILE-TIME LITERALS---\\
+	/*
+    __MODULE__: Name of the module as a string
+    __FILE__: Name of the source file as a string
+    __FILE_FULL_PATH__: Name of the source file including its full path as a string
+    __LINE__: Line number as an int
+    __FUNCTION__: Name of the function as a string
+    __PRETTY_FUNCTION__: Full signature of the function as a string
+	*/
+
+	//---VARIADIC FUNCTION ARGUMENTS---\\
+	/*
+	void someFunc(T[] args...)
+	if there will be use of the slice holding the variadic arguments later, then a duplicate must be made
+	*/
+
+	//---SPECIAL MEMBER FUNCTIONS---\\
+	/*
+	constructors are defined through "this()"
+	destructors are defined through "~this()"
+	copy constructor is defined through "this(this)"
+		slices should be copied through ".dup" in the copy constructor definition
+    assignment operator is defined through "opAssign()"
+		struct T {
+			T opAssign(T rhs) {
+				this.member = rhs.member;
+        		return this;
+			}
+		}
+	members are access through "this.MEMBER"
+	immutable members can be constructed through construction, but not assignment
+		immutable int i;
+		this.i = iArg; <- Construction
+		this.i = iArg <- Compiler error: assignment to immutable variable
+	default constructors are defined through "static opCall()"
+		struct T {
+			static T opCall() {
+				...
+				T obj;
+				return obj;
+			}
+		}
+	Dlang supports const, immutable, and shared qualifiers
+	default constructor can be disabled through "@disable this();"
+	*/
+
+	//---OPERATOR OVERLOADING---\\
+	/*
+	
+	*/
+	
 }
