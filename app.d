@@ -43,6 +43,18 @@ void printStrings(string[] strs...) {
 	}
 }
 
+struct T {
+	int var;
+	this(int x) {
+		var = x;
+	}
+	ref T opUnary(string op)()
+		if((op == "++") || (op == "--")) {
+			mixin(op ~ "var;"); // will run the cose as if whatever "op" is will be replaced with the actual representation of it concatenated with "normal code" (var;)
+			return this;
+		}
+}
+
 void main(string[] args)
 {
 	//---MISC---\\
@@ -553,7 +565,43 @@ void main(string[] args)
 
 	//---OPERATOR OVERLOADING---\\
 	/*
-	
+	operators are overloaded through template functions
+	the function names are:
+		opBinary(+, -, *, /, %, ^^, &, |, ^, <<, >>, >>>, ~, in)
+		opEquals(==, !=)
+		opCmp(<, <=, >, >=)
+		opAssign(=)
+		opOpAssign(+=, -=, *=, /=, %=, ^^=, &=, |=, ^=, <<=, >>=, >>>=, ~=)
+
+	struct T {
+		int var;
+
+		ref T opAssign(string op)() {
+			if(op == "++") {
+				++minute;
+			}
+			return this;
+		}
+		ref T opAssign(string op)() {
+			if(op == "--") {
+				--minute;
+			}
+			return this;
+		}
+		ref T opOpAssign(string op)(int num) {
+			if(op == "+") {
+				var += num;
+			}
+			return this;
+		}
+	}
+
+	Mixins can also be used to "attach" arguments/representations of code to actual code to be executed
 	*/
-	
+
+	auto num = T(5);
+	++num;
+	writeln(num.var);
+	--num;
+	writeln(num.var);
 }
