@@ -597,6 +597,28 @@ void main(string[] args)
 	}
 
 	Mixins can also be used to "attach" arguments/representations of code to actual code to be executed
+
+	opDollar:
+		Since it returns the number of elements of the container, the most suitable type for opDollar is size_t. However, the return type can be other types as well (e.g., int).
+	Unconstrained operators:
+		The return types of some of the operators depend entirely on the design of the user-defined type;they include the unary *, opCall, opCast, opDispatch, opSlice, and all opIndex varieties.
+
+	For the two objects that opEquals returns true, opCmp must return zero
+
+	For the user-defined opCmp() to work correctly, this member function must return a result according to the following rules:
+		A negative value is returned if the left-hand object is considered to be before the right- hand object in the order chosen (ascending/descending).
+		A positive value is returned if the left-hand object is considered to be after the right-hand object.
+		Zero is returned if the objects are considered to have the same sort order
+		You can use std.algorithm.cmp for comparing slices (including all string types and ranges). cmp() compares slices lexicographically and produces a negative value, zero, or positive value depending on their order.
+			That result can be used directly as the return value of opCmp
+	static opCall() allows creating objects with default values at run time.
+	non-static opCall() allows using the objects of user-defined types as functions
+	opIndex, opIndexAssign, opIndexUnary, opIndexOpAssign, and opDollar make it possible to use indexing operators on user-defined types similar to arrays as in object[index]
+		opIndexAssign is for assigning a value to an element. The first parameter is the value that is being assigned, and the second parameter is the index of the element
+		opIndexUnary is similar to opUnary. The difference is that the operation is applied to the element at the specified index
+		opIndexOpAssign is similar to opOpAssign. The difference is that the operation is applied to an element
+		opDollar defines the ＄ character that is used during indexing and slicing. It is for returning the number of elements in the container
+
 	*/
 
 	auto num = T(5);
