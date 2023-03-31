@@ -1,8 +1,8 @@
 MISC
 	
-	`readf("%s".chomp(), &someVar)` <- `.chomp()` removes newline
+	readf("%s".chomp(), &someVar) <- .chomp() removes newline
 	Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
-	`uniform(startingValue, outOfRangeValue)` for random number generation
+	uniform(startingValue, outOfRangeValue) for random number generation
 	
 
 FORMAT SPECIFIERS
@@ -13,6 +13,7 @@ FORMAT SPECIFIERS
 	%s: literal value depending on type
 	%,: separator (%,s = groups of 3, %,2s = groups of 2)
 	%.Ng or %.Nf = precision of decimal places N
+	
 	readf format specifiers:
 	%d: read an integer in the decimal system.
 	%o: read an integer in the octal system.
@@ -27,12 +28,13 @@ ARRAYS
 	T[] arr; | Dynamically allocated
 	arr.length = N; | Resized
 	arr ~= n; | Append n to arr
-				NOTE: Cannot append to fixed length arrays even if there is room
+		NOTE: Cannot append to fixed length arrays even if there is room
+		
 	arr.remove(indx); | Remove value at index from array
 	arr.remove!(a => a == 42); | Lambda predicate function to remove any element that equals 42
-				'a' is type deduced based on either the expression or underlying type of the array
+		'a' is type deduced based on either the expression or underlying type of the array
 	
-	int[10] first = 1;
+    int[10] first = 1;
     int[10] second = 2;
     int[] result;
     result = first ~ second; | result will have a size of 20 as it combines both first and second
@@ -41,14 +43,17 @@ ARRAYS
 	Associative arrays are implemented using a hash table.
 	They map the values of one type to the values of another type. The values of the type that associative arrays map from are called keys rather than indexes. Associative arrays store their elements as key-value pairs
 	An associative array that is defined without any element is null, not empty.
+	
 	int[string] days = ["monday": 0, "tuesday": 1, "test": 4];
 	Value Type[Key Type]
 	"in" operator searches for/determines if given key exists in associative array
+	
 	if("monday" in days) {
 		...
 	}
 	.get() can be used for returning value if key does not exist in associative array
 		.get(KEY, retValueIfNotFound)
+		
 	PROPERTIES of associative arrays:
 		.length returns the number of key-value pairs.
 		.keys returns a copy of all keys as a dynamic array.
@@ -61,6 +66,7 @@ ARRAYS
 		.get returns the value if it exists, or the default value otherwise.
 		.remove removes the specified key and its value from the array.
 		.clear removes all elements.
+		
 	Number range syntax: n_1 .. n_2 <- n1_ through but not including n_2, n_1 must also be less than n_2
 	A slice (dynamic array that is created from a number range) has its elements linked to the original array and do not have their own actual values
 	"$" represents the length of the array
@@ -179,8 +185,10 @@ FOREACH & ASSOCIATIVE ARRAYS
 	
 	foreach(x, y; someContainer)
 		for more than one name in the names section, x represents a counter, y represents the value
+		
 	when iterating over unicode, use the stride() function which considers the string as a container and takes two arguments:
 		the specified string, and the amount of steps to take to stride over the characters.
+		
 	associative arrays contain .byKey, .byValue, and .byKeyValue traits to help with iterating and return efficient range objects
 	
 	.byKey is the only efficient way of iterating over just the keys of an associative array:
@@ -505,11 +513,13 @@ OPERATOR OVERLOADING
 		Since it returns the number of elements of the container, the most suitable type for opDollar is size_t. However, the return type can be other types as well (e.g., int).
 	Unconstrained operators:
 		The return types of some of the operators depend entirely on the design of the user-defined type;they include the unary *, opCall, opCast, opDispatch, opSlice, and all opIndex varieties.
+		
 	For the two objects that opEquals returns true, opCmp must return zero
 	For the user-defined opCmp() to work correctly, this member function must return a result according to the following rules:
 		A negative value is returned if the left-hand object is considered to be before the right- hand object in the order chosen (ascending/descending).
 		A positive value is returned if the left-hand object is considered to be after the right-hand object.
 		Zero is returned if the objects are considered to have the same sort order
+		
 		You can use std.algorithm.cmp for comparing slices (including all string types and ranges). cmp() compares slices lexicographically and produces a negative value, zero, or positive value depending on their order.
 			That result can be used directly as the return value of opCmp
 	static opCall() allows creating objects with default values at run time.
