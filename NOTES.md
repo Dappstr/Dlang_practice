@@ -1,11 +1,11 @@
-	MISC
+MISC
 	
 	`readf("%s".chomp(), &someVar)` <- `.chomp()` removes newline
 	Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
 	`uniform(startingValue, outOfRangeValue)` for random number generation
 	
 
-	FORMAT SPECIFIERS
+FORMAT SPECIFIERS
 	
 	writefln = formatted writeln
 	%b: binary, %o = octal
@@ -22,7 +22,7 @@
 	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 	
 
-	ARRAYS
+ARRAYS
 	
 	T[] arr; | Dynamically allocated
 	arr.length = N; | Resized
@@ -71,7 +71,7 @@
 	When the number of elements to append is known beforehand, it is possible to reserve capacity for the elements using the .reserve function
 	
 
-	CHARACTERS
+CHARACTERS
 	
 	char <- UTF-8 , initial value: 0xFF
 	wchar <- UTF-16 , initial value: 0xFFFF
@@ -90,7 +90,7 @@
 		toUpper: produces the uppercase version of the given character.
 
 
-	STRINGS
+STRINGS
 	
 	readln(name);
 	name = strip(name);
@@ -121,7 +121,7 @@
 	'~' concatenates two strings, '~=' appends to string
 	
 
-	INPUT/OUTPUT TO BINARY
+INPUT/OUTPUT TO BINARY
 	
 	./app < src.txt streams input from src.txt into the app
 	./app > dst.txt streams output from app into src.txt
@@ -133,7 +133,7 @@
 	}
 	
 
-	FILES
+FILES
 		
 	Access modes:
 	r = read
@@ -159,7 +159,7 @@
 	file.close();
 	
 
-	//---ENUMS---\\
+	ENUMS
 	
 	EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
 	enum Suit { spades, hearts, diamonds, clubs }
@@ -175,7 +175,7 @@
 	foo([ 42, 100 ]); another array is created at run time
 	
 
-	FOREACH & ASSOCIATIVE ARRAYS
+FOREACH & ASSOCIATIVE ARRAYS
 	
 	foreach(x, y; someContainer)
 		for more than one name in the names section, x represents a counter, y represents the value
@@ -201,7 +201,7 @@
 	foreach_reverse() does the same as foreach but in reverse
 	
 
-	SWITCH BLOCKS
+SWITCH BLOCKS
 	
 	"goto case;" jumps to the next in line case
 	"goto default" jumps to the default case
@@ -229,7 +229,7 @@
 		}
 
 
-	CONST AND IMMUTABLE
+CONST AND IMMUTABLE
 	
 	const erases the information about whether the original variable was mutable or immutable. This information is hidden even from the compiler
 	immutable(T)[] slice = [...] equates to the elements being immutable rather than the slice its-self
@@ -238,7 +238,7 @@
 	Define constant values as enum if their values can be calculated at compile time
 	
 
-	FUNCTION PARAMETER SPECIFIERS
+FUNCTION PARAMETER SPECIFIERS
 	
 	"ref" parameters are an alias to an object and are not guaranteed to modify it
 	"auto ref" is used in templates only. It specifies that if the argument is an lvalue, then a reference to it is passed; if the argument is an rvalue, then it is passed by copy.
@@ -257,13 +257,13 @@
 		A sealed reference is when you have a reference to an object that extend beyond its lifetime
 	
 
-	MAIN
+MAIN
 	
 	if main is declared with a void return type, the return value is nonzero if an exception is thrown
 	stderr is the stream used for writing error messages
 	
 
-	PROGRAM ARGUMENTS
+PROGRAM ARGUMENTS
 	
 	std.getopt module helps in parsing command line arguments for your program
 	The getopt() function parses and assigns those values to variables. As we saw with readf(), the addresses of variables must be specified by the & operator
@@ -283,14 +283,14 @@
 	./app --count=7 --minimum=10 --maximum=15
 	
 
-	PROGRAM ENVIRONMENT
+PROGRAM ENVIRONMENT
 	
 	std.process allows access to environment your binary sits in
 	writeln(environment["PATH"]); prints the path of your binary
 	executeShell() can access and execute other programs
 	
 
-	EXCEPTIONS
+EXCEPTIONS
 	
 	Only the types that are inherited from the Throwable class can be thrown.
 	The types that are actually thrown are types that are inherited from Exception or Error, which themselves are the types that are inherited from Throwable.
@@ -332,7 +332,7 @@
 	when no exception is thrown, scope(exit) and scope(success) are executed, when an exception is thrown, scope(exit) and scope(failure) are executed
 	
 
-	ASSERT AND ENFORCE
+ASSERT AND ENFORCE
 	
 	assert() performs run-time checks
 	static assert() performs compile-time checks
@@ -341,7 +341,7 @@
 	if (count < 3) { throw new Exception("Must be at least 3."); } -> Equivalent: enforce(count >= 3, "Must be at least 3.");
 	
 
-	UNIT TESTING
+UNIT TESTING
 	
 	unittest blocks are for unit testing and do not affect the program directly
 	std.exception module contains two functions that help with testing for exceptions:
@@ -349,7 +349,7 @@
 		assertNotThrown: ensures that a specific exception type is not thrown from an expression
 	
 
-	CONTRACT PROGRAMMING
+CONTRACT PROGRAMMING
 	
 	contract programming in D is enabled by default (disabled with the -release flag) and implemented in 3 types of code blocks:
 		in, out, and struct/class invariant blocks
@@ -379,7 +379,7 @@
 	}
 	
 
-	NULL VALUE AND "is" OPERATOR
+NULL VALUE AND "is" OPERATOR
 	
 	a variable with a class type that is not initialized with "new" does not reference an (anonymous) class object
 	in order to check if the variable is null, do not use '==', use the "is" operator:
@@ -388,7 +388,7 @@
 	assigning null to an associative array breaks the relationship between the variable and the elements
 	
 
-	TYPE CONVERSION
+TYPE CONVERSION
 	
 	if arithmetic involves one real value, then the other variable is converted to real, same with double and float
 	C-like explicit conversions are supported
@@ -402,7 +402,7 @@
 	cast() can convert between pointer and non-pointer types as well
 	
 
-	STRUCTS
+STRUCTS
 	
 	immutable objects must be created with a construction object since members cannot be modified
 		immutable obj = S(x, y);
@@ -423,7 +423,7 @@
 	Similarly, static ~this() is for the final operations of a thread, and shared static ~this() is for the final operations of the entire program
 	
 
-	COMPILE-TIME LITERALS
+COMPILE-TIME LITERALS
 	
     __MODULE__: Name of the module as a string
     __FILE__: Name of the source file as a string
@@ -433,13 +433,13 @@
     __PRETTY_FUNCTION__: Full signature of the function as a string
 	
 
-	VARIADIC FUNCTION ARGUMENTS
+VARIADIC FUNCTION ARGUMENTS
 	
 	`void someFunc(T[] args...)`
 	if there will be use of the slice holding the variadic arguments later, then a duplicate must be made
 	
 
-	SPECIAL MEMBER FUNCTIONS
+SPECIAL MEMBER FUNCTIONS
 	
 	constructors are defined through "this()"
 	destructors are defined through "~this()"
@@ -469,7 +469,7 @@
 	default constructor can be disabled through "@disable this();"
 	
 
-	OPERATOR OVERLOADING
+OPERATOR OVERLOADING
 	
 	operators are overloaded through template functions
 	the function names are:
