@@ -55,6 +55,33 @@ struct T {
 		}
 }
 
+struct Number
+{
+	int[] arr1, arr2;
+
+	this(this) {
+		this.arr1 = arr1.dup;
+		this.arr2 = arr2.dup;
+	}
+
+	ref Number fill() {
+		for(int i = 0; i < 10; ++i) {
+			arr1 ~= uniform(1, 11);
+			arr2 ~= uniform(1, 11);
+
+		}
+		return this;
+	}
+
+	ref Number opUnary(string op)() {
+		if(op == "++" || op == "--") {
+			foreach (ref _; arr1) { mixin(op ~ "_;"); }
+			foreach (ref _; arr2) { mixin(op ~ "_;"); }
+		}
+		return this;
+	}
+}
+
 void main(string[] args)
 {
 
