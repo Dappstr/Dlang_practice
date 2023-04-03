@@ -522,8 +522,7 @@ OPERATOR OVERLOADING
 		
 		You can use std.algorithm.cmp for comparing slices (including all string types and ranges). cmp() compares slices lexicographically and produces a negative value, zero, or positive value depending on their order.
 			That result can be used directly as the return value of opCmp
-	static opCall() allows creating objects with default values at run time.
-	non-static opCall() allows using the objects of user-defined types as functions
+	opCall() is for functor-like implementation of types, where instances can be function-like
 	opIndex, opIndexAssign, opIndexUnary, opIndexOpAssign, and opDollar make it possible to use indexing operators on user-defined types similar to arrays as in object[index]
 		opIndexAssign is for assigning a value to an element. The first parameter is the value that is being assigned, and the second parameter is the index of the element
 		opIndexUnary is similar to opUnary. The difference is that the operation is applied to the element at the specified index
