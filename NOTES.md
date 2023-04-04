@@ -11,31 +11,49 @@ Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsi
 FORMAT SPECIFIERS
 	
 `writefln` = formatted writeln
+
 `%b`: binary, %o = octal
+
 `%x`: hexadecimal, %d = decimal
+
 `%s`: literal value depending on type
+
 `%,`: separator (%,s = groups of 3, %,2s = groups of 2)
+
 `%.Ng` or `%.Nf` = precision of decimal places N
+
 	
 read format specifiers:
+
 `%d`: read an integer in the decimal system.
+
 `%o`: read an integer in the octal system.
+
 `%x`: read an integer in the hexadecimal system.
+
 `%f`: read a floating point number.
+
 `%s`: read according to the type of the variable. This is the most commonly used specifier.
+
 `%c`: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 	
+
 
 
 ARRAYS
 	
 `T[] arr;` | Dynamically allocated
+
 `arr.length = N;` | Resized
+
 `arr ~= n;` | Append n to arr
+
 NOTE: Cannot append to fixed length arrays even if there is room
 		
 `arr.remove(indx);` | Remove value at index from array
+
 `arr.remove!(a => a == 42);` | Lambda predicate function to remove any element that equals 42
+
 'a' is type deduced based on either the expression or underlying type of the array
 
 ```d
