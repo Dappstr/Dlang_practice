@@ -9,31 +9,21 @@ Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsi
 
 
 FORMAT SPECIFIERS
-	
-`writefln` = formatted writeln
-`%b`: binary, %o = octal
-`%x`: hexadecimal, %d = decimal
-`%s`: literal value depending on type
-
-`%,`: separator (%,s = groups of 3, %,2s = groups of 2)
-
-`%.Ng` or `%.Nf` = precision of decimal places N
+	writefln = formatted writeln
+	%b: binary, %o = octal
+	%x: hexadecimal, %d = decimal
+	%s: literal value depending on type
+	%,: separator (%,s = groups of 3, %,2s = groups of 2)
+	%.Ng or %.Nf = precision of decimal places N
 
 	
 read format specifiers:
-
-`%d`: read an integer in the decimal system.
-
-`%o`: read an integer in the octal system.
-
-`%x`: read an integer in the hexadecimal system.
-
-`%f`: read a floating point number.
-
-`%s`: read according to the type of the variable. This is the most commonly used specifier.
-
-`%c`: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
-	
+	%d: read an integer in the decimal system.
+	%o: read an integer in the octal system.
+	%x: read an integer in the hexadecimal system.
+	%f: read a floating point number.
+	%s: read according to the type of the variable. This is the most commonly used specifier.
+	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 
 
 
