@@ -4,12 +4,10 @@ MISC:
 
 Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsigned
 
-```d
-uniform(startingValue, outOfRangeValue)
+`uniform(startingValue, outOfRangeValue)` for random number generation
+
+
 ```
-for random number generation
-
-
 FORMAT SPECIFIERS
 	writefln = formatted writeln
 	%b: binary, %o = octal
@@ -27,7 +25,7 @@ read format specifiers:
 	%s: read according to the type of the variable. This is the most commonly used specifier.
 	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 
-
+```
 
 ARRAYS
 	
