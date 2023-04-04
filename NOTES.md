@@ -506,161 +506,207 @@ int func(int a, int b) {
 ```
 
 # NULL VALUE AND "is" OPERATOR
-	
-	a variable with a class type that is not initialized with "new" does not reference an (anonymous) class object
-	in order to check if the variable is null, do not use '==', use the "is" operator:
-		if(someObj is null)
-		!is can also be used
-	assigning null to an associative array breaks the relationship between the variable and the elements
+
+a variable with a class type that is not initialized with `new` does not reference an (anonymous) class object
+
+in order to check if the variable is null, do not use `==`, use the `is` operator:
+
+`if(someObj is null)`
+
+assigning null to an associative array breaks the relationship between the variable and the elements
 	
 
 # TYPE CONVERSION
 	
-	if arithmetic involves one real value, then the other variable is converted to real, same with double and float
-	C-like explicit conversions are supported
-		int someVar;
-		const someConst = double(someVar)/2;
-	to!TYPE(object) is also an explicit conversion using the to() template function, also supports immutable conversions
-	assumeUnique() makes the elements of a slice immutable without copying and makes the original slice null
-		int[] numbers ...
-    	auto immutableNumbers = assumeUnique(numbers);
-	to() ensures safe conversions, cast(destinationType) does not
-	cast() can convert between pointer and non-pointer types as well
-	
+if arithmetic involves one real value, then the other variable is converted to `real`, same with `double` and `float`
 
-# STRUCTS
+C-like explicit conversions are supported
+
+```d
+int someVar;
+const someConst = double(someVar)/2;
+```
+
+`to!TYPE(object)` is also an explicit conversion using the to() template function, also supports immutable conversions
+
+`assumeUnique()` makes the elements of a slice immutable without copying and makes the original slice null
 	
-	immutable objects must be created with a construction object since members cannot be modified
-		immutable obj = S(x, y);
-	slice members will be linked between copies unless copied through .dup
-		auto someObj = S(i, [x, y, z]);
-		auto someObj2 = S(i, someObj.slice.dup); <- without dup, someObj and someObj2 share the same slice
-	static this() blocks are automatically executed once PER THREAD before a struct type is ever used in that thread.
-		struct Point {
-			enum nextIdFile = "Point_next_id_file";
-		
-			static this() {
-			if (exists(nextIdFile)) {
-				auto file = File(nextIdFile, "r");
-				file.readf(" %s", &nextId); 
-			}
-		}
-	shared static this() blocks will be executed only once in the entire program regardless of the number of threads
-	Similarly, static ~this() is for the final operations of a thread, and shared static ~this() is for the final operations of the entire program
-	dup member functions can be implemented by returning a new object of the type
+```d
+int[] numbers ...
+auto immutableNumbers = assumeUnique(numbers);
+// to() ensures safe conversions, cast(destinationType) does not
+//cast() can convert between pointer and non-pointer types as well
+```
+
 
 # COMPILE-TIME LITERALS
 	
-    __MODULE__: Name of the module as a string
-    __FILE__: Name of the source file as a string
-    __FILE_FULL_PATH__: Name of the source file including its full path as a string
-    __LINE__: Line number as an int
-    __FUNCTION__: Name of the function as a string
-    __PRETTY_FUNCTION__: Full signature of the function as a string
-	
+```
+__MODULE__: Name of the module as a string
+__FILE__: Name of the source file as a string
+__FILE_FULL_PATH__: Name of the source file including its full path as a string
+__LINE__: Line number as an int
+__FUNCTION__: Name of the function as a string
+__PRETTY_FUNCTION__: Full signature of the function as a string
+```
+
 
 # VARIADIC FUNCTION ARGUMENTS
 	
-	`void someFunc(T[] args...)`
-	if there will be use of the slice holding the variadic arguments later, then a duplicate must be made
+`void someFunc(T[] args...)` if there will be use of the slice holding the variadic arguments later, then a duplicate must be made
+
+
+# STRUCTS/CLASSES
 	
+immutable objects must be created with a construction object since members cannot be modified
+
+`immutable obj = S(x, y);`
+	
+slice members will be linked between copies unless copied through .dup
+
+```d
+auto someObj = S(i, [x, y, z]);
+auto someObj2 = S(i, someObj.slice.dup); // without dup, someObj and someObj2 share the same slice
+
+//static this() blocks are automatically executed once PER THREAD before a struct type is ever used in that thread.
+struct Point {
+	enum nextIdFile = "Point_next_id_file";	
+	static this() {
+		if (exists(nextIdFile)) {
+			auto file = File(nextIdFile, "r");
+			file.readf(" %s", &nextId); 
+		}
+	}
+}
+```
+shared `static this()` blocks will be executed only once in the entire program regardless of the number of threads
+
+Similarly, `static ~this()` is for the final operations of a thread, and shared static ~this() is for the final operations of the entire program
+
+dup member functions can be implemented by returning a new object of the type
+
 
 # SPECIAL MEMBER FUNCTIONS
 	
-	constructors are defined through "this()"
-	destructors are defined through "~this()"
-	copy constructor is defined through "this(this)"
-		slices should be copied through ".dup" in the copy constructor definition
-    assignment operator is defined through "opAssign()"
-		struct T {
-			T opAssign(T rhs) {
-				this.member = rhs.member;
-        		return this;
-			}
-		}
-	members are access through "this.MEMBER"
-	immutable members can be constructed through construction, but not assignment
-		immutable int i;
-		this.i = iArg; <- Construction
-		this.i = iArg <- Compiler error: assignment to immutable variable
-	default constructors are defined through "static opCall()"
-		struct T {
-			static T opCall() {
-				...
-				T obj;
-				return obj;
-			}
-		}
-	Dlang supports const, immutable, and shared qualifiers
-	default constructor can be disabled through "@disable this();"
+constructors are defined through `this()`
+
+destructors are defined through `~this()`
+
+copy constructor is defined through `this(this)`
+
+slices should be copied through `.dup` in the copy constructor definition
+
+assignment operator is defined through `opAssign()`
+
+```d
+struct T {
+	T opAssign(T rhs) {
+		this.member = rhs.member;
+        	return this;
+	}
+}
+```
+
+members are access through `this.MEMBER`
+
+immutable members can be constructed through construction, but not assignment
+
+`immutable int i;`
+
+`this.i = iArg;` Construction
+
+`this.i = iArg` Compiler error: assignment to immutable variable
+
+Dlang supports `const`, `immutable`, and shared qualifiers
+
+default constructor can be disabled through `@disable this();`
 	
 
 # OPERATOR OVERLOADING
 	
-	operators are overloaded through template functions
-	the function names are:
-		opBinary(+, -, *, /, %, ^^, &, |, ^, <<, >>, >>>, ~, in)
-		opEquals(==, !=)
-		opCmp(<, <=, >, >=)
-		opAssign(=)
-		opOpAssign(+=, -=, *=, /=, %=, ^^=, &=, |=, ^=, <<=, >>=, >>>=, ~=)
-	struct T {
-		int var;
-		ref T opAssign(string op)() {
-			if(op == "++") {
-				++minute;
-			}
-			return this;
+operators are overloaded through template functions
+the function names are:
+```
+opBinary(+, -, *, /, %, ^^, &, |, ^, <<, >>, >>>, ~, in)
+opEquals(==, !=)
+opCmp(<, <=, >, >=)
+opAssign(=)
+opOpAssign(+=, -=, *=, /=, %=, ^^=, &=, |=, ^=, <<=, >>=, >>>=, ~=)
+```
+```d
+struct T {
+	int var;
+	ref T opAssign(string op)() {
+		if(op == "++") {
+			++minute;
 		}
-		ref T opAssign(string op)() {
-			if(op == "--") {
-				--minute;
-			}
-			return this;
-		}
-		ref T opOpAssign(string op)(int num) {
-			if(op == "+") {
-				var += num;
-			}
-			return this;
-		}
+		return this;
 	}
-	
-	Mixins can also be used to "attach" arguments/representations of code to actual code to be executed
-	opDollar:
-		Since it returns the number of elements of the container, the most suitable type for opDollar is size_t. However, the return type can be other types as well (e.g., int).
-	Unconstrained operators:
-		The return types of some of the operators depend entirely on the design of the user-defined type;they include the unary *, opCall, opCast, opDispatch, opSlice, and all opIndex varieties.
-		
-	For the two objects that opEquals returns true, opCmp must return zero
-	For the user-defined opCmp() to work correctly, this member function must return a result according to the following rules:
-		A negative value is returned if the left-hand object is considered to be before the right- hand object in the order chosen (ascending/descending).
-		A positive value is returned if the left-hand object is considered to be after the right-hand object.
-		Zero is returned if the objects are considered to have the same sort order
-		
-		You can use std.algorithm.cmp for comparing slices (including all string types and ranges). cmp() compares slices lexicographically and produces a negative value, zero, or positive value depending on their order.
-			That result can be used directly as the return value of opCmp
-	opCall() is for functor-like implementation of types, where instances can be function-like
-	opIndex, opIndexAssign, opIndexUnary, opIndexOpAssign, and opDollar make it possible to use indexing operators on user-defined types similar to arrays as in object[index]
-		opIndexAssign is for assigning a value to an element. The first parameter is the value that is being assigned, and the second parameter is the index of the element
-		opIndexUnary is similar to opUnary. The difference is that the operation is applied to the element at the specified index
-		opIndexOpAssign is similar to opOpAssign. The difference is that the operation is applied to an element
-		opDollar defines the ＄ character that is used during indexing and slicing. It is for returning the number of elements in the container
-		opDispatch gets called whenever non-existemt members are accessed
-			struct Foo {
-			    void opDispatch(string name, T)(T parameter) { //In this example, `name` represents the member name, T represents the type of the parameter, and parameter represents the value
-			    
-				writefln("Foo.opDispatch - name: %s, value: %s",
-					 name, parameter);
-			    }
-			}
+	ref T opAssign(string op)() {
+		if(op == "--") {
+			--minute;
+		}
+		return this;
+	}
+	ref T opOpAssign(string op)(int num) {
+		if(op == "+") {
+			var += num;
+		}
+		return this;
+	}
+}
+```
 
-			void main() {
-				Foo foo;
-				foo.aNonExistentFunction(42);
-				foo.anotherNonExistentFunction(100);
-			}
-	Output:
-		Foo.opDispatch - name: aNonExistentFunction, value: 42
-		Foo.opDispatch - name: anotherNonExistentFunction, value: 100
+Mixins can also be used to "attach" arguments/representations of code to actual code to be executed
+
+`opDollar`: Since it returns the number of elements of the container, the most suitable type for opDollar is size_t. However, the return type can be other types as well (e.g., int).
+
+*Unconstrained operators*:
+The return types of some of the operators depend entirely on the design of the user-defined type;they include the unary *, opCall, opCast, opDispatch, opSlice, and all opIndex varieties.
+		
+For the two objects that opEquals returns true, `opCmp` must return zero
+
+For the user-defined `opCmp()` to work correctly, this member function must return a result according to the following rules:
+
+A negative value is returned if the left-hand object is considered to be before the right- hand object in the order chosen (ascending/descending).
+A positive value is returned if the left-hand object is considered to be after the right-hand object.
+Zero is returned if the objects are considered to have the same sort order
+		
+You can use `std.algorithm.cmp` for comparing slices (including all string types and ranges). cmp() compares slices lexicographically and produces a negative value, zero, or positive value depending on their order.
+
+That result can be used directly as the return value of `opCmp`
+	
+`opCall()` is for functor-like implementation of types, where instances can be function-like
+
+`opIndex`, `opIndexAssign`, `opIndexUnary`, `opIndexOpAssign`, and `opDollar` make it possible to use indexing operators on user-defined types similar to arrays as in object[index]
+
+`opIndexAssign` is for assigning a value to an element. The first parameter is the value that is being assigned, and the second parameter is the index of the element
+
+`opIndexUnary` is similar to `opUnary`. The difference is that the operation is applied to the element at the specified index
+
+`opIndexOpAssign` is similar to `opOpAssign`. The difference is that the operation is applied to an element
+
+`opDollar` defines the ＄ character that is used during indexing and slicing. It is for returning the number of elements in the container
+
+`opDispatch` gets called whenever non-existemt members are accessed
+
+```d
+struct Foo {
+	void opDispatch(string name, T)(T parameter) {
+	//In this example, `name` represents the member name, T represents the type of the parameter, and parameter represents the value
+			    
+	writefln("Foo.opDispatch - name: %s, value: %s", name, parameter);
+	}
+}
+
+void main() {
+	Foo foo;
+	foo.aNonExistentFunction(42);
+	foo.anotherNonExistentFunction(100);
+}
+```
+
+Output:
+"Foo.opDispatch - name: aNonExistentFunction, value: 42"
+"Foo.opDispatch - name: anotherNonExistentFunction, value: 100"
 
