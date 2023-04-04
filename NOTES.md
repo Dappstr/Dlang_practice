@@ -585,6 +585,10 @@ Similarly, `static ~this()` is for the final operations of a thread, and shared 
 
 dup member functions can be implemented by returning a new object of the type
 
+`destroy()` is a function that can be used to explicitly call an instance's destructor
+
+`scoped()` will call the object's destructor even if an exception is thrown. The object is wrapped in a struct and destroyed when the object leaves the scope
+
 
 # SPECIAL MEMBER FUNCTIONS
 	
@@ -661,7 +665,7 @@ Mixins can also be used to "attach" arguments/representations of code to actual 
 
 `opDollar`: Since it returns the number of elements of the container, the most suitable type for opDollar is size_t. However, the return type can be other types as well (e.g., int).
 
-*Unconstrained operators*:
+**Unconstrained operators**:
 The return types of some of the operators depend entirely on the design of the user-defined type;they include the unary *, opCall, opCast, opDispatch, opSlice, and all opIndex varieties.
 		
 For the two objects that opEquals returns true, `opCmp` must return zero
@@ -709,4 +713,34 @@ void main() {
 Output:
 "Foo.opDispatch - name: aNonExistentFunction, value: 42"
 "Foo.opDispatch - name: anotherNonExistentFunction, value: 100"
+
+
+# INHERITANCE
+
+The `super` keyword is used to access a member of the superclass (highest level/parent), and is most useful when specifying a member with the same name as the inherited class, as well as constructing objects i.e `super(someVal, someVal2);`
+
+`override` is used in function declarations when inherited functions differ from their parent functions
+
+`abstract` is used in function declaration when the function definition will be class/type dependant
+
+
+# INTERFACES
+
+Interfaces are declared through the `interface` keyword
+
+**Rules for interfaces:**
+```
+    The member functions that it declares (but not implements) are abstract even without the abstract keyword.
+    The member functions that it implements must be static or final. (static and final member functions are explained later in this chapter.)
+    Its member variables must be static.
+    Interfaces can inherit only interfaces.
+```
+
+
+# MODULES
+
+Module that contain `static this()` will be executed before any other section of the module. If it is declared with `shared`, then it will be executed only once
+
+Selective imports can be done by using a colon and the specific feature from the module. Ex:
+`import std.stdio : writeln;`
 
