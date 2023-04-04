@@ -1,5 +1,4 @@
-MISC:
-
+**MISC**:
 `readf("%s".chomp(), &someVar)` <- .chomp() removes newline
 
 Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsigned
@@ -7,8 +6,8 @@ Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsi
 `uniform(startingValue, outOfRangeValue)` for random number generation
 
 
+**FORMAT SPECIFIERS**
 ```
-FORMAT SPECIFIERS
 	writefln = formatted writeln
 	%b: binary, %o = octal
 	%x: hexadecimal, %d = decimal
