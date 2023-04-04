@@ -27,7 +27,9 @@ read format specifiers:
 
 ```
 
-ARRAYS
+
+
+#ARRAYS
 	
 `T[] arr;` | Dynamically allocated
 
