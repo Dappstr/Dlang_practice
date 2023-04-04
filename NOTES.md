@@ -40,12 +40,14 @@ read format specifiers:
 `arr ~= n;` | Append n to arr
 
 NOTE: Cannot append to fixed length arrays even if there is room
+
 		
 `arr.remove(indx);` | Remove value at index from array
 
 `arr.remove!(a => a == 42);` | Lambda predicate function to remove any element that equals 42
 
 'a' is type deduced based on either the expression or underlying type of the array
+
 
 ```d
 int[10] first = 1;
@@ -60,59 +62,75 @@ Associative arrays are implemented using a hash table.
 They map the values of one type to the values of another type. The values of the type that associative arrays map from are called keys rather than indexes. Associative arrays store their elements as key-value pairs
 An associative array that is defined without any element is null, not empty.
 	
-	int[string] days = ["monday": 0, "tuesday": 1, "test": 4];
-	Value Type[Key Type]
-	"in" operator searches for/determines if given key exists in associative array
+```d
+int[string] days = ["monday": 0, "tuesday": 1, "test": 4];
+// valueType[KeyType]
+
+// "in" operator searches for/determines if given key exists in associative array	
+if("monday" in days) {
+	//...
+}
+```
+
+`.get(KEY, retValueIfNotFound)` can be used for returning value if key does not exist in associative array
+		
+**PROPERTIES of associative arrays:**
+```
+	.length returns the number of key-value pairs.
+	.keys returns a copy of all keys as a dynamic array.
+	.byKey provides access to the keys without copying them; we will see how .byKey is used in foreach loops in a later chapter.
+	.values returns a copy of all values as a dynamic array.
+	.byValue provides access to the values without copying them.
+	.byKeyValue provides access to the key-value pairs without copying them.
+	.rehash may make the lookups in an array more efficient in some cases, such as after inserting a large number of key-value pairs.
+	.sizeof is the size of the array reference (it has nothing to do with the number of key-value pairs in the table and is the same value for all associative arrays).
+	.get returns the value if it exists, or the default value otherwise.
+	.remove removes the specified key and its value from the array.
+	.clear removes all elements.
+```
+		
+Number range syntax: n_1 .. n_2 <- n1_ through but not including n_2, n_1 must also be less than n_2
+A slice (dynamic array that is created from a number range) has its elements linked to the original array and do not have their own actual values
+"$" represents the length of the array
 	
-	if("monday" in days) {
-		...
-	}
-	.get() can be used for returning value if key does not exist in associative array
-		.get(KEY, retValueIfNotFound)
-		
-	PROPERTIES of associative arrays:
-		.length returns the number of key-value pairs.
-		.keys returns a copy of all keys as a dynamic array.
-		.byKey provides access to the keys without copying them; we will see how .byKey is used in foreach loops in a later chapter.
-		.values returns a copy of all values as a dynamic array.
-		.byValue provides access to the values without copying them.
-		.byKeyValue provides access to the key-value pairs without copying them.
-		.rehash may make the lookups in an array more efficient in some cases, such as after inserting a large number of key-value pairs.
-		.sizeof is the size of the array reference (it has nothing to do with the number of key-value pairs in the table and is the same value for all associative arrays).
-		.get returns the value if it exists, or the default value otherwise.
-		.remove removes the specified key and its value from the array.
-		.clear removes all elements.
-		
-	Number range syntax: n_1 .. n_2 <- n1_ through but not including n_2, n_1 must also be less than n_2
-	A slice (dynamic array that is created from a number range) has its elements linked to the original array and do not have their own actual values
-	"$" represents the length of the array
-	.dup property creates a duplicate allowing a dynamic array to copy from another static array without linking/binding elements
-	When a slice has another value added exceeding its original capacity, value sharing with the original array is ceased
-	Shortening a slice does not affect sharing
-	.capacity property returns a 0 if a slice cannot store any more values, and number N for amount of values it can store
-	When the number of elements to append is known beforehand, it is possible to reserve capacity for the elements using the .reserve function
+`.dup` property creates a duplicate allowing a dynamic array to copy from another static array without linking/binding elements
+	
+When a slice has another value added exceeding its original capacity, value sharing with the original array is ceased
+Shortening a slice does not affect sharing
+
+`.capacity` property returns a 0 if a slice cannot store any more values, and number N for amount of values it can store
+
+When the number of elements to append is known beforehand, it is possible to reserve capacity for the elements using the .reserve function
 	
 
-CHARACTERS
+# CHARACTERS
 	
-	char <- UTF-8 , initial value: 0xFF
-	wchar <- UTF-16 , initial value: 0xFFFF
-	dchar <- UTF-32 , initial value: 0x000FFFFF
-	Short names for (named) characters are denoted through \&
-		wchar currencySymbol = '\&euro;';
-		https://dlang.org/spec/entity.html
+`char` <- UTF-8 , initial value: 0xFF
+
+`wchar` <- UTF-16 , initial value: 0xFFFF
+
+`dchar` <- UTF-32 , initial value: 0x000FFFFF
+
+Short names for (named) characters are denoted through \&
+
+	`wchar currencySymbol = '\&euro;';`
 	
+	https://dlang.org/spec/entity.html
+	
+	
+```
 	std.uni module includes functions for working with unicode characters:
-		isLower: is it a lowercase character?
-		isUpper: is it an uppercase character?
-		isAlpha: is it a Unicode alphabetic character?
-		isWhite: is it a whitespace character?
-		The functions that start with “to” produce new characters from existing ones:
-		toLower: produces the lowercase version of the given character.
-		toUpper: produces the uppercase version of the given character.
+	isLower: is it a lowercase character?
+	isUpper: is it an uppercase character?
+	isAlpha: is it a Unicode alphabetic character?
+	isWhite: is it a whitespace character?
+	The functions that start with “to” produce new characters from existing ones:
+	toLower: produces the lowercase version of the given character.
+	toUpper: produces the uppercase version of the given character.
+```
 
 
-STRINGS
+# STRINGS
 	
 	readln(name);
 	name = strip(name);
@@ -143,7 +161,7 @@ STRINGS
 	'~' concatenates two strings, '~=' appends to string
 	
 
-INPUT/OUTPUT TO BINARY
+# INPUT/OUTPUT TO BINARY
 	
 	./app < src.txt streams input from src.txt into the app
 	./app > dst.txt streams output from app into src.txt
@@ -155,7 +173,7 @@ INPUT/OUTPUT TO BINARY
 	}
 	
 
-FILES
+# FILES
 		
 	Access modes:
 	r = read
@@ -197,7 +215,7 @@ FILES
 	foo([ 42, 100 ]); another array is created at run time
 	
 
-FOREACH & ASSOCIATIVE ARRAYS
+# FOREACH & ASSOCIATIVE ARRAYS
 	
 	foreach(x, y; someContainer)
 		for more than one name in the names section, x represents a counter, y represents the value
@@ -225,7 +243,7 @@ FOREACH & ASSOCIATIVE ARRAYS
 	foreach_reverse() does the same as foreach but in reverse
 	
 
-SWITCH BLOCKS
+# SWITCH BLOCKS
 	
 	"goto case;" jumps to the next in line case
 	"goto default" jumps to the default case
@@ -253,7 +271,7 @@ SWITCH BLOCKS
 		}
 
 
-CONST AND IMMUTABLE
+# # CONST AND IMMUTABLE
 	
 	const erases the information about whether the original variable was mutable or immutable. This information is hidden even from the compiler
 	immutable(T)[] slice = [...] equates to the elements being immutable rather than the slice its-self
@@ -262,7 +280,7 @@ CONST AND IMMUTABLE
 	Define constant values as enum if their values can be calculated at compile time
 	
 
-FUNCTION PARAMETER SPECIFIERS
+# FUNCTION PARAMETER SPECIFIERS
 	
 	"ref" parameters are an alias to an object and are not guaranteed to modify it
 	"auto ref" is used in templates only. It specifies that if the argument is an lvalue, then a reference to it is passed; if the argument is an rvalue, then it is passed by copy.
@@ -281,13 +299,13 @@ FUNCTION PARAMETER SPECIFIERS
 		A sealed reference is when you have a reference to an object that extend beyond its lifetime
 	
 
-MAIN
+# MAIN
 	
 	if main is declared with a void return type, the return value is nonzero if an exception is thrown
 	stderr is the stream used for writing error messages
 	
 
-PROGRAM ARGUMENTS
+# PROGRAM ARGUMENTS
 	
 	std.getopt module helps in parsing command line arguments for your program
 	The getopt() function parses and assigns those values to variables. As we saw with readf(), the addresses of variables must be specified by the & operator
@@ -307,14 +325,14 @@ PROGRAM ARGUMENTS
 	./app --count=7 --minimum=10 --maximum=15
 	
 
-PROGRAM ENVIRONMENT
+# PROGRAM ENVIRONMENT
 	
 	std.process allows access to environment your binary sits in
 	writeln(environment["PATH"]); prints the path of your binary
 	executeShell() can access and execute other programs
 	
 
-EXCEPTIONS
+# EXCEPTIONS
 	
 	Only the types that are inherited from the Throwable class can be thrown.
 	The types that are actually thrown are types that are inherited from Exception or Error, which themselves are the types that are inherited from Throwable.
@@ -356,7 +374,7 @@ EXCEPTIONS
 	when no exception is thrown, scope(exit) and scope(success) are executed, when an exception is thrown, scope(exit) and scope(failure) are executed
 	
 
-ASSERT AND ENFORCE
+# ASSERT AND ENFORCE
 	
 	assert() performs run-time checks
 	static assert() performs compile-time checks
@@ -365,7 +383,7 @@ ASSERT AND ENFORCE
 	if (count < 3) { throw new Exception("Must be at least 3."); } -> Equivalent: enforce(count >= 3, "Must be at least 3.");
 	
 
-UNIT TESTING
+# UNIT TESTING
 	
 	unittest blocks are for unit testing and do not affect the program directly
 	std.exception module contains two functions that help with testing for exceptions:
@@ -373,7 +391,7 @@ UNIT TESTING
 		assertNotThrown: ensures that a specific exception type is not thrown from an expression
 	
 
-CONTRACT PROGRAMMING
+# CONTRACT PROGRAMMING
 	
 	contract programming in D is enabled by default (disabled with the -release flag) and implemented in 3 types of code blocks:
 		in, out, and struct/class invariant blocks
@@ -403,7 +421,7 @@ CONTRACT PROGRAMMING
 	}
 	
 
-NULL VALUE AND "is" OPERATOR
+# NULL VALUE AND "is" OPERATOR
 	
 	a variable with a class type that is not initialized with "new" does not reference an (anonymous) class object
 	in order to check if the variable is null, do not use '==', use the "is" operator:
@@ -412,7 +430,7 @@ NULL VALUE AND "is" OPERATOR
 	assigning null to an associative array breaks the relationship between the variable and the elements
 	
 
-TYPE CONVERSION
+# TYPE CONVERSION
 	
 	if arithmetic involves one real value, then the other variable is converted to real, same with double and float
 	C-like explicit conversions are supported
@@ -426,7 +444,7 @@ TYPE CONVERSION
 	cast() can convert between pointer and non-pointer types as well
 	
 
-STRUCTS
+# STRUCTS
 	
 	immutable objects must be created with a construction object since members cannot be modified
 		immutable obj = S(x, y);
@@ -447,7 +465,7 @@ STRUCTS
 	Similarly, static ~this() is for the final operations of a thread, and shared static ~this() is for the final operations of the entire program
 	dup member functions can be implemented by returning a new object of the type
 
-COMPILE-TIME LITERALS
+# COMPILE-TIME LITERALS
 	
     __MODULE__: Name of the module as a string
     __FILE__: Name of the source file as a string
@@ -457,13 +475,13 @@ COMPILE-TIME LITERALS
     __PRETTY_FUNCTION__: Full signature of the function as a string
 	
 
-VARIADIC FUNCTION ARGUMENTS
+# VARIADIC FUNCTION ARGUMENTS
 	
 	`void someFunc(T[] args...)`
 	if there will be use of the slice holding the variadic arguments later, then a duplicate must be made
 	
 
-SPECIAL MEMBER FUNCTIONS
+# SPECIAL MEMBER FUNCTIONS
 	
 	constructors are defined through "this()"
 	destructors are defined through "~this()"
@@ -493,7 +511,7 @@ SPECIAL MEMBER FUNCTIONS
 	default constructor can be disabled through "@disable this();"
 	
 
-OPERATOR OVERLOADING
+# OPERATOR OVERLOADING
 	
 	operators are overloaded through template functions
 	the function names are:
