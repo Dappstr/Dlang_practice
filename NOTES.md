@@ -7,8 +7,6 @@ Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsi
 `uniform(startingValue, outOfRangeValue)` for random number generation
 
 
-
-
 # FORMAT SPECIFIERS
 ```
 	writefln = formatted writeln
@@ -28,7 +26,6 @@ read format specifiers:
 	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 
 ```
-
 
 
 # ARRAYS
@@ -113,9 +110,9 @@ When the number of elements to append is known beforehand, it is possible to res
 
 Short names for (named) characters are denoted through \&
 
-	`wchar currencySymbol = '\&euro;';`
+`wchar currencySymbol = '\&euro;';`
 	
-	https://dlang.org/spec/entity.html
+https://dlang.org/spec/entity.html
 	
 	
 ```
@@ -132,62 +129,70 @@ Short names for (named) characters are denoted through \&
 
 # STRINGS
 	
-	readln(name);
-	name = strip(name);
-	readln reads up until the end of the line
-	strip() removes trailing and leading whitespace, and can be chained
-		string name = strip(readln());
+```d
+readln(name); // readln reads up until the end of the line
+name = strip(name); //	strip() removes trailing and leading whitespace, and can be chained
+```
+strip() removes trailing and leading whitespace, and can be chained
+
+`string name = strip(readln());`
 	
-	formattedRead() from std.format converts separate data.
-		first argument = line to read from
-		second parameter are amount to divide in
-		...n parameters are objects to read into
-	string line = strip(readln());
-    string name;
-    int age;
-    formattedRead(line, " %s %s", name, age);
-	amount of "data items" can be validated as such:
-		uint items = formattedRead(line, " %s %s", name, age); 
-		if (items != 2) {
-  			writeln("Error: Expected more than one item.");
-		}
-	string is immutable
-	char[] is mutable
-	.dup for duplicating a string to a mutable char array
-	.idup for duplicating a mutable char array to an immutable string
-	.icmp for comparing strings
-	dchar[] s = "résumé"d.dup;
-	There is a d at the end of the literal "résumé"d, specifying its type as an array of dchars
-	'~' concatenates two strings, '~=' appends to string
-	
+`formattedRead()` from std.format converts separate data.
+
+first argument = line to read from
+second parameter are amount to divide in
+...n parameters are objects to read into
+
+```d
+string line = strip(readln());
+string name;
+int age;
+
+formattedRead(line, " %s %s", name, age);
+```
+```
+string is immutable
+char[] is mutable
+.dup for duplicating a string to a mutable char array
+.idup for duplicating a mutable char array to an immutable string
+.icmp for comparing strings
+dchar[] s = "résumé"d.dup;
+There is a d at the end of the literal "résumé"d, specifying its type as an array of dchars
+'~' concatenates two strings, '~=' appends to string
+```
+
 
 # INPUT/OUTPUT TO BINARY
 	
-	./app < src.txt streams input from src.txt into the app
-	./app > dst.txt streams output from app into src.txt
-	std.stdio module has a File struct
-	Byte Order Mark (BOM) may be required on some systems, which specifies the order the UTF code unites of characters are arranged
-	The std.file module contains functions and types that are useful when working with the contents of directories
-	if (exists(fileName)) {
-    	there is a file or directory under that name
-	}
+`./app < src.txt` streams input from src.txt into the app
+
+`./app > dst.txt` streams output from app into src.txt
+
+std.stdio module has a File struct
+Byte Order Mark (BOM) may be required on some systems, which specifies the order the UTF code unites of characters are arranged
+The std.file module contains functions and types that are useful when working with the contents of directories
+
+`if (exists(fileName))` there is a file or directory under that name
 	
 
 # FILES
 		
-	Access modes:
-	r = read
-	r+ = read/write, will error if file does not exist
-	w = write access, if file does not exist, it is created, IF FILE DOES EXIST, ITS CONTENTS ARE CLEARED
-	w+ = write/read, if file does not exist, it is created, IF FILE DOES EXIST, ITS CONTENTS ARE CLEARED
-	a = append, if file does not exist, it is created, once opened, it is written only towards the end
-	a+ = read and append, if file does not exist, it is created, once opened, it is written only towards the end
-	.readln property for reading from file object
-	.writeln property for writing to file object
+**Access modes:**
+```
+r = read
+r+ = read/write, will error if file does not exist
+w = write access, if file does not exist, it is created, IF FILE DOES EXIST, ITS CONTENTS ARE CLEARED
+w+ = write/read, if file does not exist, it is created, IF FILE DOES EXIST, ITS CONTENTS ARE CLEARED
+a = append, if file does not exist, it is created, once opened, it is written only towards the end
+a+ = read and append, if file does not exist, it is created, once opened, it is written only towards the end
+.readln property for reading from file object
+.writeln property for writing to file object
+```
 	
-	File file = File("test.txt", "w+");
+```d
+File file = File("test.txt", "w+");
 	if(exists("test.txt")) {
-		/*
+	/*
 		Entire block is useless since file has been cleared due to access mode
 		while(!file.eof()) {
 			string line = strip(file.readln());
@@ -197,23 +202,29 @@ Short names for (named) characters are denoted through \&
 		file.writeln("Test ", "Four");
 	}
 	file.close();
-	
+```
 
-	ENUMS
+
+# ENUMS
 	
-	EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
-	enum Suit { spades, hearts, diamonds, clubs }
-   	foreach (suit; EnumMembers!Suit) {
+EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
+	
+```d
+enum Suit { spades, hearts, diamonds, clubs }
+
+foreach (suit; EnumMembers!Suit) {
       writefln("%s: %d", suit, suit); 
     }
-	Suit suit = cast(Suit)1; // Evaluates to hearts since "1" is casted to type Suit
-	enum a = [ 42, 100 ]; 
-	writeln(a);
-	foo(a);
-	is equivalent to
-	writeln([ 42, 100 ]); an array is created at  run time 
-	foo([ 42, 100 ]); another array is created at run time
-	
+
+Suit suit = cast(Suit)1; // Evaluates to hearts since "1" is casted to type Suit
+enum a = [ 42, 100 ]; 
+writeln(a);
+foo(a);
+
+// Alternative:
+writeln([ 42, 100 ]); //an array is created at  run time 
+```
+
 
 # FOREACH & ASSOCIATIVE ARRAYS
 	
