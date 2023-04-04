@@ -1,9 +1,12 @@
 **MISC**:
+
 `readf("%s".chomp(), &someVar)` <- .chomp() removes newline
 
 Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsigned
 
 `uniform(startingValue, outOfRangeValue)` for random number generation
+
+
 
 
 **FORMAT SPECIFIERS**
