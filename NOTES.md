@@ -744,3 +744,45 @@ Module that contain `static this()` will be executed before any other section of
 Selective imports can be done by using a colon and the specific feature from the module. Ex:
 `import std.stdio : writeln;`
 
+
+# UFCS
+
+Universal Function Call Syntax allows for function chaining and for functions to act as member variables when no argument is provided
+
+`writeln(evens(divide(multiply(values, 10), 3)));` when normal function call syntax is declared as such, the outermost function is executed first, and then the innter most functions are then executed in order (multiply, divide, events).
+
+Usage of functions as traits allows the order to be more instinctive `writeln(values.multiply(10).divide(3).evens);` or `alues.multiply(10).divide(3).evens.writeln;`
+
+Property functions can also be used in assignment if they take an argument
+
+```d
+import std.math;
+
+struct Rectangle {
+    double width;
+    double height;
+
+    void area(double newArea) {
+        auto scale = sqrt(newArea / area);
+        width *= scale;
+        height *= scale;
+    }
+}
+
+void main() {
+    auto garden = Rectangle(10, 20);
+    garden.area = 50;
+```
+
+The `@property` attribute can be used as well, however its usage is generally discouraged
+
+The `invariant()` member function can be used to define contracts that member functions must meet and is automatically checked at the beginning and end of every non-static, non-private, and/or non-trusted member function
+
+# TEMPLATES
+
+When there is only one template type argument, it does not need to be specified within parenthesis, for example `to!string` is what's commonly written instead of `to!(string)`
+
+Template specializations are declared by specifying the type after a colon in the template parameter
+
+Default template arguments can be declared through assignment i.e `T func(T = int)(T x) { //..`
+
