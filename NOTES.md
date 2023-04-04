@@ -1,48 +1,50 @@
-MISC
-	
-	readf("%s".chomp(), &someVar) <- .chomp() removes newline
-	Safe calculations: adds/addu, subs/subu, muls/mulu <- s = signed, u = unsigned
-	uniform(startingValue, outOfRangeValue) for random number generation
+MISC:
+`readf("%s".chomp(), &someVar)` <- .chomp() removes newline
+Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsigned
+`uniform(startingValue, outOfRangeValue)` for random number generation
 	
 
 FORMAT SPECIFIERS
 	
-	writefln = formatted writeln
-	%b: binary, %o = octal
-	%x: hexadecimal, %d = decimal
-	%s: literal value depending on type
-	%,: separator (%,s = groups of 3, %,2s = groups of 2)
-	%.Ng or %.Nf = precision of decimal places N
+`writefln` = formatted writeln
+`%b`: binary, %o = octal
+`%x`: hexadecimal, %d = decimal
+`%s`: literal value depending on type
+`%,`: separator (%,s = groups of 3, %,2s = groups of 2)
+`%.Ng` or `%.Nf` = precision of decimal places N
 	
-	readf format specifiers:
-	%d: read an integer in the decimal system.
-	%o: read an integer in the octal system.
-	%x: read an integer in the hexadecimal system.
-	%f: read a floating point number.
-	%s: read according to the type of the variable. This is the most commonly used specifier.
-	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
+read format specifiers:
+`%d`: read an integer in the decimal system.
+`%o`: read an integer in the octal system.
+`%x`: read an integer in the hexadecimal system.
+`%f`: read a floating point number.
+`%s`: read according to the type of the variable. This is the most commonly used specifier.
+`%c`: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 	
 
 ARRAYS
 	
-	T[] arr; | Dynamically allocated
-	arr.length = N; | Resized
-	arr ~= n; | Append n to arr
-		NOTE: Cannot append to fixed length arrays even if there is room
+`T[] arr;` | Dynamically allocated
+`arr.length = N;` | Resized
+`arr ~= n;` | Append n to arr
+NOTE: Cannot append to fixed length arrays even if there is room
 		
-	arr.remove(indx); | Remove value at index from array
-	arr.remove!(a => a == 42); | Lambda predicate function to remove any element that equals 42
-		'a' is type deduced based on either the expression or underlying type of the array
+`arr.remove(indx);` | Remove value at index from array
+`arr.remove!(a => a == 42);` | Lambda predicate function to remove any element that equals 42
+'a' is type deduced based on either the expression or underlying type of the array
+
+```d
+int[10] first = 1;
+int[10] second = 2;
+int[] result;
+result = first ~ second;
+```
+result will have a size of 20 as it combines both first and second
+std.algorithm provides useful functions such as sort() and reverse()
 	
-    int[10] first = 1;
-    int[10] second = 2;
-    int[] result;
-    result = first ~ second; | result will have a size of 20 as it combines both first and second
-	std.algorithm provides useful functions such as sort() and reverse()
-	
-	Associative arrays are implemented using a hash table.
-	They map the values of one type to the values of another type. The values of the type that associative arrays map from are called keys rather than indexes. Associative arrays store their elements as key-value pairs
-	An associative array that is defined without any element is null, not empty.
+Associative arrays are implemented using a hash table.
+They map the values of one type to the values of another type. The values of the type that associative arrays map from are called keys rather than indexes. Associative arrays store their elements as key-value pairs
+An associative array that is defined without any element is null, not empty.
 	
 	int[string] days = ["monday": 0, "tuesday": 1, "test": 4];
 	Value Type[Key Type]
@@ -429,7 +431,7 @@ STRUCTS
 		}
 	shared static this() blocks will be executed only once in the entire program regardless of the number of threads
 	Similarly, static ~this() is for the final operations of a thread, and shared static ~this() is for the final operations of the entire program
-	
+	dup member functions can be implemented by returning a new object of the type
 
 COMPILE-TIME LITERALS
 	
@@ -528,3 +530,21 @@ OPERATOR OVERLOADING
 		opIndexUnary is similar to opUnary. The difference is that the operation is applied to the element at the specified index
 		opIndexOpAssign is similar to opOpAssign. The difference is that the operation is applied to an element
 		opDollar defines the ＄ character that is used during indexing and slicing. It is for returning the number of elements in the container
+		opDispatch gets called whenever non-existemt members are accessed
+			struct Foo {
+			    void opDispatch(string name, T)(T parameter) { //In this example, `name` represents the member name, T represents the type of the parameter, and parameter represents the value
+			    
+				writefln("Foo.opDispatch - name: %s, value: %s",
+					 name, parameter);
+			    }
+			}
+
+			void main() {
+				Foo foo;
+				foo.aNonExistentFunction(42);
+				foo.anotherNonExistentFunction(100);
+			}
+	Output:
+		Foo.opDispatch - name: aNonExistentFunction, value: 42
+		Foo.opDispatch - name: anotherNonExistentFunction, value: 100
+
