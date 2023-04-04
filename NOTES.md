@@ -589,6 +589,21 @@ dup member functions can be implemented by returning a new object of the type
 
 `scoped()` will call the object's destructor even if an exception is thrown. The object is wrapped in a struct and destroyed when the object leaves the scope
 
+The `with` keyword can be used to access the members of a class object directly even if they're private
+
+```d
+class T {
+//... some members
+}
+
+void main() {
+	T t = ...
+	with (t) {
+		// Now the members of a type `T` can be accessed directly instead of constantly needing to qualify them with `t.MEMBER`
+	}
+}
+```
+
 
 # SPECIAL MEMBER FUNCTIONS
 	
@@ -786,3 +801,49 @@ Template specializations are declared by specifying the type after a colon in th
 
 Default template arguments can be declared through assignment i.e `T func(T = int)(T x) { //..`
 
+
+# PRAGMA
+
+Different implementations of pragmas mean different things:
+```d
+pragma(inline, false) {
+   // Functions defined in this scope should not be inlined
+   // ...
+}
+
+int foo() {
+    pragma(inline, true); // This function should be inlined
+    // ...
+}
+
+pragma(inline, true):
+// Functions defined in this section should be inlined 
+// ...
+
+pragma(inline):
+// Functions defined in this section should be inlined or not 
+// depending on the -inline compiler switch
+// ...
+```
+
+`pragma(startaddress)` specifies the start address of the program.
+
+
+# 'alias this'
+
+`alias` and `this` have a completely different meaning when combined
+
+`alias this` enables the specific conversion from the user-defined type to the type of that member
+
+```d
+struct Fraction {
+    long numerator;
+    long denominator;
+
+    double value() const {
+        return double(numerator) / denominator;
+    }
+
+    alias value this; //Now an object of type `Fraction` can be implicitly cast into type `double` because that is the type value() returns
+    // ...
+}
