@@ -200,7 +200,7 @@ File file = File("test.txt", "w+");
 		}
 		
 		file.writeln("Test ", "Four");
-	}
+	} */
 	file.close();
 ```
 
@@ -228,186 +228,255 @@ writeln([ 42, 100 ]); //an array is created at  run time
 
 # FOREACH & ASSOCIATIVE ARRAYS
 	
-	foreach(x, y; someContainer)
-		for more than one name in the names section, x represents a counter, y represents the value
+`foreach(x, y; someContainer)` for more than one name in the names section, x represents a counter, y represents the value
 		
-	when iterating over unicode, use the stride() function which considers the string as a container and takes two arguments:
-		the specified string, and the amount of steps to take to stride over the characters.
-		
-	associative arrays contain .byKey, .byValue, and .byKeyValue traits to help with iterating and return efficient range objects
-	
-	.byKey is the only efficient way of iterating over just the keys of an associative array:
-	int[string] aa = [ "blue" : 10, "green" : 20 ]; 
+when iterating over unicode, use the stride() function which considers the string as a container and takes two arguments:
+	the specified string, and the amount of steps to take to stride over the characters.
+
+associative arrays contain `.byKey`, `.byValue`, and `.byKeyValue` traits to help with iterating and return efficient range objects
+
+`.byKey` is the only efficient way of iterating over just the keys of an associative array:
+
+```b
+int[string] aa = [ "blue" : 10, "green" : 20 ]; 
     foreach (key; aa.byKey) {
         writeln(key);
     }
-	.byKeyValue provides access to each key-value element through a variable that is similar to a tuple. The key and the value are accessed separately through the .key and .value properties of that variable:
-	int[string] aa = [ "blue" : 10, "green" : 20 ]; 
+```
+
+`.byKeyValue` provides access to each key-value element through a variable that is similar to a tuple. The key and the value are accessed separately through the .key and .value properties of that variable:
+
+```d
+int[string] aa = [ "blue" : 10, "green" : 20 ]; 
     foreach (element; aa.byKeyValue) { 
         writefln("The value for key %s is %s", element.key, element.value);
     }
-	ref keyword creates a reference to the actual members or elements of the container.
+	// ref keyword creates a reference to the actual members or elements of the container.
 	foreach(ref obj; container) {
-		through obj, now everything iterated over container will take effect
-		...
+		// through obj, now everything iterated over container will take effect
+		// ...
 	}
 	foreach_reverse() does the same as foreach but in reverse
-	
+```
+
 
 # SWITCH BLOCKS
 	
-	"goto case;" jumps to the next in line case
-	"goto default" jumps to the default case
-	The type of the switch expression is limited to integer types, string types and bool
-	switch/case supports range syntax
-	switch (someExpr) {
+`goto case;` jumps to the next in line case
+
+`goto default` jumps to the default case
+
+The type of the switch expression is limited to integer types, string types and bool
+switch/case supports range syntax
+
+```d
+switch (someExpr) {
     case 1:
-        ...
+        // ...
     case 2: .. case 5: 
-        ...
+        // ...
     case 6:
-        ...
-	}
-	The final switch statement works similarly to the regular switch statement, with the following differences:
-		It cannot have a default section. Note that this section is meaningless when the case sections cover the entire range of values anyway, similar to the six values of the die above.
-		Value ranges cannot be used with case sections (distinct values can be).
-		If the expression is of an enum type, all values of the enum must be covered by the case statements.
-	final switch (someExpr) {
+        // ...
+}
+```
+
+The final switch statement works similarly to the regular switch statement, with the following differences:
+	It cannot have a default section. Note that this section is meaningless when the case sections cover the entire range of values anyway, similar to the six values of the die above.
+	Value ranges cannot be used with case sections (distinct values can be).
+	If the expression is of an enum type, all values of the enum must be covered by the case statements.
+
+```d
+final switch (someExpr) {
 		case 1:
-		...
+		// ...
 		case 2, 3, 4, 5: 
-		...
+		// ...
 		case 6:
-		...
+		// ...
 		}
+```
 
 
-# # CONST AND IMMUTABLE
+# CONST AND IMMUTABLE
 	
-	const erases the information about whether the original variable was mutable or immutable. This information is hidden even from the compiler
-	immutable(T)[] slice = [...] equates to the elements being immutable rather than the slice its-self
-	As a general rule, prefer immutable variables over mutable ones. For functions that take mutable data and have to modify it, immutable variables will not serve the purpose
-	Specify variables as immutable if their values will never change but cannot be known at compile time
-	Define constant values as enum if their values can be calculated at compile time
+`const` erases the information about whether the original variable was mutable or immutable. This information is hidden even from the compiler
+
+`immutable(T)[] slice = [...]` equates to the elements being immutable rather than the slice its-self
+
+As a general rule, prefer immutable variables over mutable ones. For functions that take mutable data and have to modify it, immutable variables will not serve the purpose
+Specify variables as immutable if their values will never change but cannot be known at compile time
+Define constant values as enum if their values can be calculated at compile time
 	
 
 # FUNCTION PARAMETER SPECIFIERS
 	
-	"ref" parameters are an alias to an object and are not guaranteed to modify it
-	"auto ref" is used in templates only. It specifies that if the argument is an lvalue, then a reference to it is passed; if the argument is an rvalue, then it is passed by copy.
-	"out" parameters are also an alias to an object and are guaranteed to modify it as the objects value is not considered
-	"in" preserves the argument
-	"const" declares that objects will not be modified
-	"immutable" declares only non-changeable objects can be passed
-	"inout" carries the mutability of the parameter on to the return type. If the parameter is const, immutable or mutable; then the return value is also const, immutable or mutable; respectively
-	
-	Evaluating arguments before calling a function is called eager evaluation.
-	The "lazy" keyword specifies that an expression that is passed as a parameter will be evaluated only if and when needed.
-		NOTE: lazy parameter is evaluated every time that parameter is used in the function
-	The "scope" keyword specifies that a parameter will not be used beyond the scope of the function. Currently the scope is effective only if the function is defined as @safe and if the -dip1000 compiler switch is used.
-	The "shared" keyword requires that the parameter is shareable between threads of execution
-	The "return" keyword can be applied to a parameter to prevent such bugs. It specifies that a parameter must be a reference to a variable with a longer lifetime than the returned reference
-		A sealed reference is when you have a reference to an object that extend beyond its lifetime
+```
+"ref" parameters are an alias to an object and are not guaranteed to modify it
+"auto ref" is used in templates only. It specifies that if the argument is an lvalue, then a reference to it is passed; if the argument is an rvalue, then it is passed by copy.
+"out" parameters are also an alias to an object and are guaranteed to modify it as the objects value is not considered
+"in" preserves the argument
+"const" declares that objects will not be modified
+"immutable" declares only non-changeable objects can be passed
+"inout" carries the mutability of the parameter on to the return type. If the parameter is const, immutable or mutable; then the return value is also const, immutable or mutable; respectively
+```
+
+Evaluating arguments before calling a function is called eager evaluation.
+The `lazy` keyword specifies that an expression that is passed as a parameter will be evaluated only if and when needed.
+
+NOTE: lazy parameter is evaluated every time that parameter is used in the function
+
+The `scope`  keyword specifies that a parameter will not be used beyond the scope of the function. Currently the scope is effective only if the function is defined as @safe and if the -dip1000 compiler switch is used.
+
+The `shared` keyword requires that the parameter is shareable between threads of execution
+
+The `return` keyword can be applied to a parameter to prevent such bugs. It specifies that a parameter must be a reference to a variable with a longer lifetime than the returned reference
+
+A sealed reference is when you have a reference to an object that extend beyond its lifetime
 	
 
 # MAIN
 	
-	if main is declared with a void return type, the return value is nonzero if an exception is thrown
-	stderr is the stream used for writing error messages
+if main is declared with a void return type, the return value is nonzero if an exception is thrown
+`stderr` is the stream used for writing error messages
 	
 
 # PROGRAM ARGUMENTS
 	
-	std.getopt module helps in parsing command line arguments for your program
-	The getopt() function parses and assigns those values to variables. As we saw with readf(), the addresses of variables must be specified by the & operator
-	void main(string[] args) {
-		int count, minimum, maximum;
+`std.getopt` module helps in parsing command line arguments for your program
+
+The `getopt()` function parses and assigns those values to variables. As we saw with readf(), the addresses of variables must be specified by the & operator
+
+```d
+void main(string[] args) {
+	int count, minimum, maximum;
 		
-		getopt(args,
-			"count", &count,
-			"minimum", &minimum, 
-			"maximum", &maximum);
-		foreach (i; 0 .. count) {
-			write(uniform(minimum, maximum + 1), ' '); 
-		}
-		writeln(); 
+	getopt(args,
+		"count", &count,
+		"minimum", &minimum, 
+		"maximum", &maximum);
+	foreach (i; 0 .. count) {
+		write(uniform(minimum, maximum + 1), ' '); 
 	}
-	example:
-	./app --count=7 --minimum=10 --maximum=15
+	writeln(); 
+}
+```
+
+example:
+	`./app --count=7 --minimum=10 --maximum=15`
 	
 
 # PROGRAM ENVIRONMENT
 	
-	std.process allows access to environment your binary sits in
-	writeln(environment["PATH"]); prints the path of your binary
-	executeShell() can access and execute other programs
+`std.process` allows access to environment your binary sits in
+
+`writeln(environment["PATH"]); `prints the path of your binary
+
+`executeShell()` can access and execute other programs
 	
 
 # EXCEPTIONS
 	
-	Only the types that are inherited from the Throwable class can be thrown.
-	The types that are actually thrown are types that are inherited from Exception or Error, which themselves are the types that are inherited from Throwable.
-	Error represents unrecoverable conditions and is not recommended to be caught
-	In most cases, instead of creating an exception object explicitly by new and throwing it explicitly by throw, the enforce() function is called
-		example:
-		enforce(count >= 0, format("Invalid dice count: %s", count));
-	Use throw in situations when it is not possible to continue
+Only the types that are inherited from the Throwable class can be thrown.
+The types that are actually thrown are types that are inherited from Exception or Error, which themselves are the types that are inherited from Throwable.
+Error represents unrecoverable conditions and is not recommended to be caught
+In most cases, instead of creating an exception object explicitly by new and throwing it explicitly by throw, the enforce() function is called
+example:
+
+```d
+	enforce(count >= 0, format("Invalid dice count: %s", count)); // Use throw in situations when it is not possible to continue
 	try {
-    // the code block that is being executed, where an exception may be thrown
+   	 // the code block that is being executed, where an exception may be thrown
+	 
 	} catch (an_exception_type) {
+	
 		// expressions to execute if an exception of this type is caught
 	} finally {
+	
 		// expressions to execute regardless of whether an exception is thrown
 	}
-	if opening a file fails for example, a "std.exception.ErrnoException" exception object will be thrown
-											std.exception.ConvException is for conversion errors
-	objects of type Error can also be caught, although NOT RECOMMENDED
-	catch(Exception exc) is a general "catch-all" for exceptions and is not recommended
-	the "finally" block will execute regardless of if an exception is thrown or not
-	PROPERTIES OF EXCEPTION OBJECTS:
-		.file: the source file where the exception was thrown from
-		.line: the line number where the exception was thrown from
-		.msg:  the error message
-		.info: the state of the program stack when the exception was thrown
-		.next: the next collateral exception
-	 Exceptions that are thrown while leaving scopes due to an already thrown exception are called collateral exceptions.
-	 Both the main exception and the collateral exceptions are elements of a linked list data structure, where every exception object is accessible through the .next property of the previous exception object
-	scope expressions are executed depending on how a scope exits
-		scope(exit): the expression is always executed when exiting the scope, regardless of whether it is successful or due to an exception
-		scope(success): the expression is executed only if the scope is being exited successfully
-		scope(failure): the expression is executed only if the scope is being exited due to an exception
-	scope(exit) writeln("scope exited normally");
-	scope(success) {
-		writeln("scope exited successfully");
-		...
-	}
+```
+if opening a file fails for example, a `std.exception.ErrnoException` exception object will be thrown
+
+`std.exception.ConvException` is for conversion errors
+
+objects of type Error can also be caught, although NOT RECOMMENDED
+
+`catch(Exception exc)` is a general "catch-all" for exceptions and is not recommended
+
+the `finally` block will execute regardless of if an exception is thrown or not
+
+**PROPERTIES OF EXCEPTION OBJECTS:**
+```
+.file: the source file where the exception was thrown from
+.line: the line number where the exception was thrown from
+.msg:  the error message
+.info: the state of the program stack when the exception was thrown
+.next: the next collateral exception
+```
+
+ Exceptions that are thrown while leaving scopes due to an already thrown exception are called collateral exceptions.
+ Both the main exception and the collateral exceptions are elements of a linked list data structure, where every exception object is accessible through the `.next` property of the previous exception object
+ 
+scope expressions are executed depending on how a scope exits
+
+`scope(exit)`: the expression is always executed when exiting the scope, regardless of whether it is successful or due to an exception
+
+`scope(success)`: the expression is executed only if the scope is being exited successfully
+
+`scope(failure)`: the expression is executed only if the scope is being exited due to an exception
+
+Examples:
+```d
+scope(exit) writeln("scope exited normally");
+
+scope(success) {
+	writeln("scope exited successfully");
+	// ...
+}
 	scope(failure) writeln("scope exited with a failure);
-	when no exception is thrown, scope(exit) and scope(success) are executed, when an exception is thrown, scope(exit) and scope(failure) are executed
+```
+when no exception is thrown, scope(exit) and scope(success) are executed, when an exception is thrown, scope(exit) and scope(failure) are executed
 	
 
 # ASSERT AND ENFORCE
 	
-	assert() performs run-time checks
-	static assert() performs compile-time checks
-	compiler flag -release ignores asserts
-	enforce() is a wrapper for assert() that throws exceptions
-	if (count < 3) { throw new Exception("Must be at least 3."); } -> Equivalent: enforce(count >= 3, "Must be at least 3.");
+`assert()` performs run-time checks
+
+`static assert()` performs compile-time checks
+
+compiler flag -release ignores asserts
+
+`enforce()` is a wrapper for assert() that throws exceptions
+
+```d
+if (count < 3) {
+	throw new Exception("Must be at least 3.");
+}
+```
+Equivalent: `enforce(count >= 3, "Must be at least 3.");`
 	
 
 # UNIT TESTING
 	
-	unittest blocks are for unit testing and do not affect the program directly
-	std.exception module contains two functions that help with testing for exceptions:
-		assertThrown: ensures that a specific exception type is thrown from an expression
-		assertNotThrown: ensures that a specific exception type is not thrown from an expression
+unittest blocks are for unit testing and do not affect the program directly
+
+`std.exception` module contains two functions that help with testing for exceptions:
+
+`assertThrown`: ensures that a specific exception type is thrown from an expression
+
+`assertNotThrown`: ensures that a specific exception type is not thrown from an expression
 	
 
 # CONTRACT PROGRAMMING
 	
-	contract programming in D is enabled by default (disabled with the -release flag) and implemented in 3 types of code blocks:
-		in, out, and struct/class invariant blocks
-	in an "in" or "out" block, checks are performed (such as asserts) or what're called "preconditions" for "in" respectively, and "postconditions" for "out" respectively.
-	"in" and "out" blocks must be followed by "do" blocks
+contract programming in D is enabled by default (disabled with the -release flag) and implemented in 3 types of code blocks:
+
+`in`, `out`, and `struct`/`class` invariant blocks
+
+in an `in` or `out` block, checks are performed (such as asserts) or what're called "preconditions" for "in" respectively, and "postconditions" for "out" respectively.
+
+`in` and `out` blocks must be followed by `do` blocks
+```d
 	void someFunc(...) {
 		in {
 			assert(...);
@@ -423,14 +492,18 @@ writeln([ 42, 100 ]); //an array is created at  run time
 			...
 		}
 	}
-	Other example with cleaner code:
-	int func(int a, int b) {
-		in (a >= 7, "a cannot be less than 7") in (b < 10)
+```
+
+Other example with cleaner code:
+
+```d
+int func(int a, int b) {
+	in (a >= 7, "a cannot be less than 7") in (b < 10)
 		out (result; result > 1000) {
-			...
+			// ...
 		}
 	}
-	
+```
 
 # NULL VALUE AND "is" OPERATOR
 	
