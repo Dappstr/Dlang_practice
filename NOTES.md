@@ -1,4 +1,4 @@
-**MISC**:
+# MISC:
 
 `readf("%s".chomp(), &someVar)` <- .chomp() removes newline
 
@@ -9,7 +9,7 @@ Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsi
 
 
 
-# **FORMAT SPECIFIERS**
+# FORMAT SPECIFIERS
 ```
 	writefln = formatted writeln
 	%b: binary, %o = octal
@@ -31,7 +31,7 @@ read format specifiers:
 
 
 
-# **ARRAYS**
+# ARRAYS
 	
 `T[] arr;` | Dynamically allocated
 
