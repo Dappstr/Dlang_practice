@@ -4,8 +4,10 @@ MISC:
 
 Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsigned
 
-`uniform(startingValue, outOfRangeValue)` for random number generation
-
+```d
+uniform(startingValue, outOfRangeValue)
+```
+for random number generation
 
 
 FORMAT SPECIFIERS
