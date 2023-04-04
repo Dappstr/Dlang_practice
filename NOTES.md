@@ -11,11 +11,8 @@ Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsi
 FORMAT SPECIFIERS
 	
 `writefln` = formatted writeln
-
 `%b`: binary, %o = octal
-
 `%x`: hexadecimal, %d = decimal
-
 `%s`: literal value depending on type
 
 `%,`: separator (%,s = groups of 3, %,2s = groups of 2)
