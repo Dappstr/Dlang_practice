@@ -847,3 +847,9 @@ struct Fraction {
     alias value this; //Now an object of type `Fraction` can be implicitly cast into type `double` because that is the type value() returns
     // ...
 }
+```
+
+
+# BITWISE OPERATIONS
+
+TODO
