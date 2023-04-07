@@ -852,4 +852,8 @@ struct Fraction {
 
 # BITWISE OPERATIONS
 
-TODO
+The new bits that enter from the left-hand side are 0 only for unsigned types. For signed types, the value of the leftmost bits are determined by a process called sign extension. Sign extension preserves the value of the sign bit of the original expression. The value of that bit is used for all of the bits that enter from the left.
+For signed types, when the bits are shifted right, the new bits will be the value of the former left most bit.
+
+`>>>` is for unsigned right shift
+
