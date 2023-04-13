@@ -259,6 +259,8 @@ int[string] aa = [ "blue" : 10, "green" : 20 ];
 	foreach_reverse() does the same as foreach but in reverse
 ```
 
+`static foreach` can be used to run a compile-time iteration. The "iterable" (variable being iterated over) must be known at compile-time
+
 
 # SWITCH BLOCKS
 	
@@ -935,7 +937,7 @@ They can be used along with the member function `opApply` which is an overload f
 `opApply` and `opApplyReverse` return an integer. If the integer that's returned is non-zero, then the `foreach` loop breaks. The delegate which is the argument, represents the expression within the `foreach` block which contains the expression
 
 ```d
-int opApply(scope int delegate(int) operation) // operation() represents the `foreach` block and returns an integer representing the result. It is `scope`'d to ensure that the lifetime of the variables within the delegate do not escape the function it's passed to allowing the compiler to make any possible optimizations
+int opApply(scope int delegate(int) operation) // operation() represents the `foreach` block and returns an integer representing the result. It is "scope"-ed to ensure that the lifetime of the variables within the delegate do not escape the function it's passed to allowing the compiler to make any possible optimizations
 	{
 		int result = 0;
 	
@@ -948,4 +950,16 @@ int opApply(scope int delegate(int) operation) // operation() represents the `fo
 		return result;
 	}
 ```
+
+
+# UNIONS
+
+Members of a union contain the same memory space. Ergo, the size of a Union is dependent on the size of its largest member. Itr is most commonly used to represent a new type that is capable of holding data for multiple types, however when only one member will be useful at a time.
+
+
+# TUPLES
+
+Tuples are another way of an object having data for multiple types. `tuple()` is used to construct a tuple containing data as arguments with the types typically being inferred and then indexed.
+
+`auto t = tuple(10, "test", 'd');` in this case `t[0]` will contain a value of integer type, `t[1]` will contain a value of 
 
