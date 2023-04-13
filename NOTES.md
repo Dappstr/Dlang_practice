@@ -929,3 +929,25 @@ If the type can be inferred, then `T` is unnecessary. Otherwise it is used to im
 # DELEGATES
 
 Delegates are similar to lambdas, however they extend the lifetime of the variables used within their expressions to the length of which the lambda is alive. 
+
+They are used along with the member function `opApply` which is an overload for the `foreach` function.
+
+## OVERLOADING FOREACH
+
+`opApply` and `opApplyReverse` return an integer. If the integer that's returned is non-zero, then the `foreach` loop breaks. The delegate which is the argument, represents the expression within the `foreach` block which contains the expression
+
+```d
+int opApply(scope int delegate(int) operation) // operation() represents the `foreach` block and returns an integer representing the result. It is `scope`'d to ensure that the lifetime of the variables within the delegate do not escape the function it's passed to allowing the compiler to make any possible optimizations
+	{
+		int result = 0;
+	
+		for (int num = begin; num < end; ++num) {
+			result = operation(num); //result will be either 0 or a nonzero after calling `operation` on `num`
+
+			if (result > 0) { break; }
+		}
+	
+		return result;
+	}
+```
+
