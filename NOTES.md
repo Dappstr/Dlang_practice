@@ -930,9 +930,7 @@ If the type can be inferred, then `T` is unnecessary. Otherwise it is used to im
 
 Delegates are similar to lambdas, however they extend the lifetime of the variables used within their expressions to the length of which the lambda is alive. 
 
-They are used along with the member function `opApply` which is an overload for the `foreach` function.
-
-## OVERLOADING FOREACH
+They can be used along with the member function `opApply` which is an overload for the `foreach` function.
 
 `opApply` and `opApplyReverse` return an integer. If the integer that's returned is non-zero, then the `foreach` loop breaks. The delegate which is the argument, represents the expression within the `foreach` block which contains the expression
 
