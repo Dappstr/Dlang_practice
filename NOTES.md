@@ -857,3 +857,75 @@ For signed types, when the bits are shifted right, the new bits will be the valu
 
 `>>>` is for unsigned right shift
 
+**Possibly more to add in the future**
+
+
+# CONDITIONAL COMPILATION
+
+`debug` blocks will be executed when the `-debug` compilation flag is set, debug levels can also be set via `debug(n)`
+
+`static if` blocks are compile-time equivalent `if` blocks, similar to C++20's implementation of `constexpr if`
+
+```d
+struct MyType(T) {
+    static if (is (T == float)) {
+        alias ResultType = double;
+    }
+    else static if (is (T == double)) {
+        alias ResultType = real;
+    }
+    // ...
+```
+
+The `__traits` keyword can be used to specify type traits, useful when working with templates
+
+```d
+static if (__traits(isArithmetic, T)) { 
+    // ... an arithmetic type ...
+} else {
+    // ... not an arithmetic type ...
+}
+```
+
+Similarly the code written above can be represented as such:
+
+```d
+import std.traits; 
+
+// ...
+
+static if (isSomeChar!T) {
+    // ... char, wchar, or dchar ...
+} else {
+    // ... not a character type ...
+}
+```
+
+`is` expressions are not the same as `is` evaluations such as when used in `if` conditions. An `is` expression returns a value of `0` or `1` depending on whether the expression.
+
+`is(T Alias)` turns `Alias` into a type alias for `T`
+
+`is(T: Type)` evaluates whether `T` can be converted to `Type`
+
+`is(T == Type)` evaluates whether `T` is of the **same** type as `Type` while also preserving immutability, const-ness, shared, or other specifiers
+
+
+# FUNCTION POINTERS
+
+Function pointers are declared by the `function` keyword before the return type followed by arguments in parenthesis.
+
+
+# LAMBDAS
+
+Lambdas/Anonymous functions are declared through the `=>` operator
+
+Lambdas can be declared as function arguments when there is a function with a `function` parameter.
+
+`(T x) => { };`
+
+If the type can be inferred, then `T` is unnecessary. Otherwise it is used to imply the return type. The curly brackets enclosing the expression are optional.
+
+
+# DELEGATES
+
+Delegates are similar to lambdas, however they extend the lifetime of the variables used within their expressions to the length of which the lambda is alive. 
