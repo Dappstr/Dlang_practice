@@ -803,6 +803,30 @@ Template specializations are declared by specifying the type after a colon in th
 
 Default template arguments can be declared through assignment i.e `T func(T = int)(T x) { //..`
 
+The `template` keyword can also be used to define template functions, or even templated namespaces as such:
+
+```d
+template MyTemplate(T) {
+    T foo(T value) {
+        return value / 3;
+    }
+struct S {
+    T member; 
+    }
+```
+
+Eponymous templates are template blocks that contain a definition that has the same name as that block. In fact, each shortcut template syntax is the shortcut of an eponymous template.
+
+```d
+template LargerOf(A, B) {
+    static if (A.sizeof < B.sizeof) {
+        alias LargerOf = B;
+    
+    } else {
+        alias LargerOf = A; 
+    }
+}
+```
 
 # PRAGMA
 
