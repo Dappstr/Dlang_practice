@@ -1,12 +1,3 @@
-# MISC:
-
-`readf("%s".chomp(), &someVar)` <- .chomp() removes newline
-
-Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsigned
-
-`uniform(startingValue, outOfRangeValue)` for random number generation
-
-
 # FORMAT SPECIFIERS
 ```
 	writefln = formatted writeln
@@ -26,6 +17,7 @@ read format specifiers:
 	%c: read a single character. This specifier allows reading whitespace characters as well (they are not ignored anymore).
 
 ```
+
 
 
 # ARRAYS
@@ -127,6 +119,7 @@ https://dlang.org/spec/entity.html
 ```
 
 
+
 # STRINGS
 	
 ```d
@@ -160,6 +153,7 @@ dchar[] s = "résumé"d.dup;
 There is a d at the end of the literal "résumé"d, specifying its type as an array of dchars
 '~' concatenates two strings, '~=' appends to string
 ```
+
 
 
 # INPUT/OUTPUT TO BINARY
@@ -205,6 +199,7 @@ File file = File("test.txt", "w+");
 ```
 
 
+
 # ENUMS
 	
 EnumMembers template comes from std.traits, returns a static tuple of all members of the enumerated type arranged in declared order
@@ -224,6 +219,7 @@ foo(a);
 // Alternative:
 writeln([ 42, 100 ]); //an array is created at  run time 
 ```
+
 
 
 # FOREACH & ASSOCIATIVE ARRAYS
@@ -297,6 +293,7 @@ final switch (someExpr) {
 		// ...
 		}
 ```
+
 
 
 # CONST AND IMMUTABLE
@@ -506,6 +503,7 @@ int func(int a, int b) {
 		}
 	}
 ```
+
 
 # NULL VALUE AND "is" OPERATOR
 
@@ -795,6 +793,7 @@ The `@property` attribute can be used as well, however its usage is generally di
 
 The `invariant()` member function can be used to define contracts that member functions must meet and is automatically checked at the beginning and end of every non-static, non-private, and/or non-trusted member function
 
+
 # TEMPLATES
 
 When there is only one template type argument, it does not need to be specified within parenthesis, for example `to!string` is what's commonly written instead of `to!(string)`
@@ -987,3 +986,11 @@ Tuples are another way of an object having data for multiple types. `tuple()` is
 
 `auto t = tuple(10, "test", 'd');` in this case `t[0]` will contain a value of integer type, `t[1]` will contain a value of 
 
+
+# MISC:
+
+`readf("%s".chomp(), &someVar)` <- .chomp() removes newline
+
+Safe calculations: `adds/addu`, `subs/subu`, `muls/mulu` <- s = signed, u = unsigned
+
+`uniform(startingValue, outOfRangeValue)` for random number generation
