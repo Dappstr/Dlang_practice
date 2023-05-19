@@ -143,16 +143,21 @@ int age;
 
 formattedRead(line, " %s %s", name, age);
 ```
-```
-string is immutable
-char[] is mutable
-.dup for duplicating a string to a mutable char array
-.idup for duplicating a mutable char array to an immutable string
-.icmp for comparing strings
+
+`string` is immutable
+
+`char[]` is mutable
+
+`.dup` for duplicating a string to a mutable char array
+
+`.idup` for duplicating a mutable char array to an immutable string
+
+`.icmp` for comparing strings
+
 dchar[] s = "résumé"d.dup;
 There is a d at the end of the literal "résumé"d, specifying its type as an array of dchars
 '~' concatenates two strings, '~=' appends to string
-```
+
 
 
 
